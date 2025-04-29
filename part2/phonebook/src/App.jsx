@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import AddPersonForm from './components/AddPersonForm'
 import Person from './components/Person'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 
 function App() {
@@ -10,6 +11,8 @@ function App() {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
+  const [message, setMessage] = useState(null)
+  const [messageType, setMessageType] = useState(null)
 
   useEffect(() => {
     personService.getAll()
@@ -53,7 +56,12 @@ function App() {
               setPersons(persons.map(person => person.id === existingPerson.id ? returnedPerson : person))
             })
             .catch(error => {
-              alert(`the person ${existingPerson.name} could not be updated`)
+              setMessage(`Information of ${existingPerson.name} has already been removed from server`)
+              setMessageType('error')
+              setTimeout(() => {
+                setMessage(null)
+                setMessageType(null)
+              }, 2000)
             })
         } else {
           console.log('update canceled')
@@ -65,6 +73,12 @@ function App() {
           setPersons(persons.concat(returnedPerson))
           setNewName('')
           setNewNumber('')
+          setMessage(`Added ${returnedPerson.name}`)
+          setMessageType('success')
+          setTimeout(() => {
+            setMessage(null)
+            setMessageType(null)
+          }, 2000)
         })
     }
   }
@@ -79,6 +93,7 @@ function App() {
   return (
     <div>
       <h2>Phoneboook</h2>
+      <Notification message={message} messageType={messageType} />
       <Filter onChange={handleSearchTerm} />
 
       <AddPersonForm 
