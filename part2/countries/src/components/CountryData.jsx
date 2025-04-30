@@ -4,8 +4,6 @@ const Country = ({ country }) => {
         return null
     }
 
-    console.log(country.languages)
-
     return (
         <div>
             <h1>{country.name.common}</h1>
@@ -14,9 +12,9 @@ const Country = ({ country }) => {
 
             <h2>Languages</h2>
             <ul>
-                {Object.values(country.languages).forEach(language => {
-                    <li>{language}</li>
-                })}
+                {Object.values(country.languages).map(language => 
+                    <li key={language}>{language}</li>
+                )}
             </ul>
             <img src={country.flags.png} />
 
