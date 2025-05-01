@@ -16,13 +16,8 @@ function App() {
       })
   }, [])
 
-  const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(searchTerm) )
+  const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(searchTerm))
 
-  
-  if (countriesToShow.length === 1) {
-    console.log(countriesToShow[0].name.common)
-  }
-  
   const handleSearchTerm = (event) => {
     setSearchTerm(event.target.value.toLowerCase())
     console.log(searchTerm)

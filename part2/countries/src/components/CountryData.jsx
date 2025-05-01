@@ -1,6 +1,7 @@
-const Country = ({ country }) => {
+const CountryData = ({ country }) => {
     console.log('rendering Country')
-    if (country === null) {
+    
+    if (!country) {
         return null
     }
 
@@ -22,4 +23,4 @@ const Country = ({ country }) => {
     )
 }
 
-export default Country
+export default CountryData
