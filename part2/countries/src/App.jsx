@@ -3,10 +3,15 @@ import countryService from './services/countries'
 import Filter from './components/Filter'
 import CountryData from './components/CountryData'
 import CountryElement from './components/CountyElement'
+import Weather from './components/Weather'
+import axios from 'axios'
 
 function App() {
   const [countries, setCountries] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
+  const [weather, setWeather] = useState(null)
+
+  const api_key = import.meta.env.VITE_API_KEY
 
   useEffect(() => {
     countryService.getAll()
@@ -15,6 +20,8 @@ function App() {
         setCountries(countryList)
       })
   }, [])
+
+
 
   const countriesToShow = countries.filter(country => country.name.common.toLowerCase().includes(searchTerm))
 
@@ -35,7 +42,7 @@ function App() {
       {countriesToShow.length > 10 ? 
           (
             <p>Too many matches, specify another filter</p>
-          ) : countriesToShow.length <= 10 && countriesToShow.length > 2 ? 
+          ) : countriesToShow.length <= 10 && countriesToShow.length >= 2 ? 
           ( 
             <div>
               {countriesToShow.map(country => 
