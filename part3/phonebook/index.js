@@ -5,6 +5,7 @@ const morgan = require('morgan')
 
 app.use(express.json())
 app.use(morgan('tiny'))
+app.use(express.static('dist'))
 
 //TO-DO: extra credit - configure morgan so that it also shows the data sent in HTTP POST requests
 
