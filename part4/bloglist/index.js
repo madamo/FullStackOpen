@@ -1,22 +1,12 @@
 const express = require('express')
 const mongoose = require('mongoose')
-
+const Blog = require('./models/blog')
 const app = express()
-
-const blogSchema = mongoose.Schema({
-  title: String,
-  author: String,
-  url: String,
-  likes: Number,
-})
-
-const Blog = mongoose.model('Blog', blogSchema)
 
 const password = process.argv[2]
 console.log(password)
 
 const mongoUrl = `mongodb+srv://mattadamoux:${password}@cluster0.u3sqg.mongodb.net/bloglistApp?retryWrites=true&w=majority&appName=Cluster0`
-
 
 //const mongoUrl = 'mongodb://localhost/bloglist'
 mongoose.connect(mongoUrl)
