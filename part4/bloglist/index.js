@@ -1,8 +1,7 @@
-const express = require('express')
-const mongoose = require('mongoose')
-const Blog = require('./models/blog')
-const app = express()
+const app = require('./app')
+const config = require('./utils/config')
 
+/*
 const password = process.argv[2]
 console.log(password)
 
@@ -26,8 +25,8 @@ app.post('/api/blogs', (request, response) => {
     response.status(201).json(result)
   })
 })
+  */
 
-const PORT = 3003
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`)
+app.listen(config.PORT, () => {
+  console.log(`Server running on port ${config.PORT}`)
 })
