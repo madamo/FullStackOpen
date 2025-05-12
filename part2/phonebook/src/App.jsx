@@ -81,7 +81,13 @@ function App() {
           }, 2000)
         })
         .catch(error => {
-          console.log(error.response.data.error)
+          setMessage(error.response.data.error)
+          setMessageType('error')
+          setTimeout(() => {
+            setMessage(null)
+            setMessageType(null)
+          }, 5000)
+         //console.log(error.response.data.error)
         })
     }
   }
