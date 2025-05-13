@@ -26,6 +26,12 @@ test('blogs are returned as json', async () => {
     .expect('Content-Type', /application\/json/)
 })
 
+test('blogs have property id, not _id', async () => {
+  const blogs = await helper.blogsInDb()
+
+  assert(Object.hasOwn(blogs[0], 'id'))
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
