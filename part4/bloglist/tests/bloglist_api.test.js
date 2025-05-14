@@ -95,7 +95,32 @@ test('number of likes will default to 0 if it is missing from request', async ()
   const blogsAtEnd = await helper.blogsInDb()
   assert.strictEqual(blogsAtEnd[6].likes, 0)
 
+})
 
+test('new blogs must have a title', async () => {
+  const blogWithNoTitle = {
+    author: "Test Author",
+    url: "http://localhost:3001/test.html",
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithNoTitle)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
+})
+
+test('new blogs must have a url', async () => {
+  const blogWithNoUrl = {
+    title: "My Test Blog",
+    author: "Test Author",
+  }
+
+  await api
+    .post('/api/blogs')
+    .send(blogWithNoUrl)
+    .expect(400)
+    .expect('Content-Type', /application\/json/)
 })
 
 after(async () => {
