@@ -30,7 +30,33 @@ blogsRouter.post('/', async (request, response) => {
   } catch (exception) {
     next(exception)
   }
+})
 
+blogsRouter.delete('/:id', async (request, response, next) => {
+  try {
+    await Blog.findByIdAndDelete(request.params.id)
+    response.status(204).end()
+  } catch (exception) {
+    next(exception)
+  }
+})
+
+blogsRouter.put('/:id', async (request, response, next) => {
+  const likes = request.body.likes
+  try {
+    const blog = await Blog.findById(request.params.id)
+    if (!blog) {
+      console.log('blog not found')
+      return response.status(404).end()
+    }
+
+    blog.likes = likes
+
+    const updatedBlog = await blog.save()
+    response.json(updatedBlog)
+  } catch (exception) {
+    next(exception)
+  }
 })
 
 module.exports = blogsRouter
