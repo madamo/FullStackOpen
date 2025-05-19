@@ -13,7 +13,7 @@ blogsRouter.get('/', async (request, response) => {
     next(exception)
   }
 })
-
+/* // Moving to middleware
 const getTokenFrom = request => {
   const authorization = request.get('authorization')
   if (authorization && authorization.startsWith('Bearer ')) {
@@ -21,7 +21,7 @@ const getTokenFrom = request => {
   }
 
   return null
-}
+} */
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
@@ -29,7 +29,7 @@ blogsRouter.post('/', async (request, response) => {
   // temp user
   //const users = await User.find({})
 
-  const decodedToken = jwt.verify(getTokenFrom(request), process.env.SECRET)
+  const decodedToken = jwt.verify(request.token, process.env.SECRET)
 
   if (!decodedToken.id) {
     return response.status(401).json({ error: 'invalid token' })
