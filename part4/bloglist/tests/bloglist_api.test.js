@@ -5,12 +5,15 @@ const supertest = require('supertest')
 const app = require('../app')
 const helper = require('./test_helper')
 const Blog = require('../models/blog')
+const User = require('../models/user')
 
 const api = supertest(app)
 
 beforeEach(async () => {
   await Blog.deleteMany({})
   await Blog.insertMany(helper.initialBlogs)
+  await User.deleteMany({})
+  await User.insertMany(helper.initialUsers)
 })
 
 test('all blogs are returned', async () => {
@@ -164,6 +167,89 @@ describe('updating a blog', () => {
     const updatedBlog = blogsAtEnd[0]
 
     assert.strictEqual(updatedBlog.likes, reqBody.likes)
+  })
+})
+
+describe('creating a user', () => {
+  test('a valid user can be created', async () => {
+    const newUser = {
+      "username": "automatedtest",
+      "name": "Automated Test",
+      "password": "validpassword"
+    }
+
+    const usersAtStart = await helper.usersInDb()
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(201)
+      .expect('Content-Type', /application\/json/)
+    
+    const usersAtEnd = await helper.usersInDb()
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length + 1)
+  })
+
+  test('a missing password returns status 400 and error message', async () => {
+    const newUser = {
+      "username": "automatedtest",
+      "name": "Automated Test",
+    }
+
+    const usersAtStart = await helper.usersInDb()
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+      const usersAtEnd = await helper.usersInDb()
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('password must be at least 3 characters', async () => {
+    const newUser = {
+      "username": "automatedtest",
+      "name": "Automated Test",
+      "password": "12"
+    }
+
+    const usersAtStart = await helper.usersInDb()
+
+    await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+  })
+
+  test('a missing username returns 400 and error message', async () => {
+    const newUser =  {
+      "username": "root",
+      "name": "Superuser",
+      "password": "password123"
+    }
+
+    const usersAtStart = await helper.usersInDb()
+
+    const result = await api
+      .post('/api/users')
+      .send(newUser)
+      .expect(400)
+      .expect('Content-Type', /application\/json/)
+
+    const usersAtEnd = await helper.usersInDb()
+
+    assert(result.body.error.includes('expected `username` to be unique'))
+
+    assert.strictEqual(usersAtEnd.length, usersAtStart.length)
   })
 })
 
