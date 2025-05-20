@@ -13,33 +13,10 @@ blogsRouter.get('/', async (request, response) => {
     next(exception)
   }
 })
-/* // Moving to middleware
-const getTokenFrom = request => {
-  const authorization = request.get('authorization')
-  if (authorization && authorization.startsWith('Bearer ')) {
-    return authorization.replace('Bearer ', '')
-  }
-
-  return null
-} */
 
 blogsRouter.post('/', async (request, response) => {
   const body = request.body
-
-  // temp user
-  //const users = await User.find({})
-
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'invalid token' })
-  }
-
-  const user = await User.findById(decodedToken.id)
-
-  if (!user) {
-    return response.status(400).json({ error: 'userID missing or not valid' })
-  }
+  const user = request.user
 
   if (!body.title) {
     return response.status(400).json({ error: 'title missing' })
@@ -70,13 +47,7 @@ blogsRouter.post('/', async (request, response) => {
 
 blogsRouter.delete('/:id', async (request, response, next) => {
   // get the user submitting the request
-  const decodedToken = jwt.verify(request.token, process.env.SECRET)
-
-  if (!decodedToken.id) {
-    return response.status(401).json({ error: 'invalid token' })
-  }
-
-  const requestUser = await User.findById(decodedToken.id)
+  const requestUser = request.user
 
   if (!requestUser) {
     return response.status(400).json({ error: 'userID missing or invalid' })
