@@ -60,26 +60,6 @@ test('a valid blog post can be added', async () => {
     url === newBlog.url &&
     likes === newBlog.likes
   }))
-  /*
-  // Check if the new list of blogs contains an object with the title, author, url, likes of the test case
-  const result = blogsAtEnd.find(( {title, author, url, likes }) => {
-   return title === newBlog.title && 
-    author === newBlog.author &&
-    url === newBlog.url &&
-    likes === newBlog.likes
-  })
-
-  // Get the values of each property in the returned match
-  const contents = Object.values(result)
-
-  // Remove the ID
-  const removed = contents.splice(contents.length-1, 1)
-  
-  // Test if the values in the returned object match values in test object 
-  assert(contents.every(val => newBlogValues.includes(val)))
-
-*/
-
 })
 
 test('number of likes will default to 0 if it is missing from request', async () => {
