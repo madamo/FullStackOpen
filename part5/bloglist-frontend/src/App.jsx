@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Blog from './components/Blog'
 import CreateBlog from './components/CreateBlog'
 import Login from './components/Login'
+import Notification from './components/Notification'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -14,6 +15,7 @@ const App = () => {
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
+  const [notification, setNotification] = useState({ message: null })
 
   useEffect(() => {
     if (user !== null) {
@@ -37,6 +39,13 @@ const App = () => {
     }
   }, [])
 
+  //TO-DO: notification
+  const notifyWith = (message, isError = false) => {
+    setNotification({ message, isError })
+    setTimeout(() => {
+      setNotification({ message: null })
+    }, 5000)
+  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -59,6 +68,7 @@ const App = () => {
       setPassword('')
     } catch (error) {
       console.error(error)
+      notifyWith(`Invalid username or password`, true)
     }
   }
 
@@ -80,14 +90,18 @@ const App = () => {
       const createdBlog = await blogService.createBlog(blogObject)
       console.log(createdBlog)
       setBlogs(blogs.concat(createdBlog))
+      notifyWith(`${blogTitle} by ${blogAuthor} added!`)
     } catch (error) {
       console.error(error)
+      notifyWith(`${error}`, true)
     }
   }
 
   if (user === null) {
     return (
       <div>
+        <Notification notification={notification} />
+
         <Login 
           submitHandler={handleLogin}
           username={username} 
@@ -102,6 +116,9 @@ const App = () => {
   return (
     <div>
       <h2>Blogs</h2>
+      <Notification notification={notification} />
+      <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
+
       <CreateBlog
         blogTitle={blogTitle}
         updateBlogTitle={setBlogTitle}
@@ -111,10 +128,12 @@ const App = () => {
         updateBlogUrl={setBlogUrl}
         handleCreate={handleCreate}
          />
-      <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
-      {blogs.map(blog => 
-        <Blog key={blog.id} blog={blog} /> 
-      )}
+
+      <div>
+        {blogs.map(blog => 
+          <Blog key={blog.id} blog={blog} /> 
+        )}
+      </div>
     </div>
   )
 }
