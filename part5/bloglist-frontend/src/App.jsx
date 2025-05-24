@@ -3,6 +3,7 @@ import Blog from './components/Blog'
 import CreateBlog from './components/CreateBlog'
 import Login from './components/Login'
 import Notification from './components/Notification'
+import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 
@@ -91,6 +92,7 @@ const App = () => {
       console.log(createdBlog)
       setBlogs(blogs.concat(createdBlog))
       notifyWith(`${blogTitle} by ${blogAuthor} added!`)
+      //TO-DO: hide CreateBlog form
     } catch (error) {
       console.error(error)
       notifyWith(`${error}`, true)
@@ -119,15 +121,17 @@ const App = () => {
       <Notification notification={notification} />
       <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
 
-      <CreateBlog
-        blogTitle={blogTitle}
-        updateBlogTitle={setBlogTitle}
-        blogAuthor={blogAuthor}
-        updateBlogAuthor={setBlogAuthor}
-        blogUrl={blogUrl}
-        updateBlogUrl={setBlogUrl}
-        handleCreate={handleCreate}
-         />
+      <Togglable buttonLabel="Add Blog">
+        <CreateBlog
+          blogTitle={blogTitle}
+          updateBlogTitle={setBlogTitle}
+          blogAuthor={blogAuthor}
+          updateBlogAuthor={setBlogAuthor}
+          blogUrl={blogUrl}
+          updateBlogUrl={setBlogUrl}
+          handleCreate={handleCreate}
+          />
+        </Togglable>
 
       <div>
         {blogs.map(blog => 
