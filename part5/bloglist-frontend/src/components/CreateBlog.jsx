@@ -1,4 +1,11 @@
+import { useState } from 'react'
+
 const CreateBlog = ({ blogTitle, updateBlogTitle, blogAuthor, updateBlogAuthor, blogUrl, updateBlogUrl, handleCreate }) => {
+
+  const [newBlog, setNewBlog] = useState('')
+
+  //TO-DO: Move new blog states to this component
+
   return (
     <form onSubmit={handleCreate}>
       <h2>Create new blog:</h2>
