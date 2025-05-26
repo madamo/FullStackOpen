@@ -13,9 +13,9 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [blogTitle, setBlogTitle] = useState('')
-  const [blogAuthor, setBlogAuthor] = useState('')
-  const [blogUrl, setBlogUrl] = useState('')
+  //const [blogTitle, setBlogTitle] = useState('')
+  //const [blogAuthor, setBlogAuthor] = useState('')
+  //const [blogUrl, setBlogUrl] = useState('')
   const [notification, setNotification] = useState({ message: null })
 
   useEffect(() => {
@@ -78,20 +78,15 @@ const App = () => {
     setUser(null)
   }
 
-  const handleCreate = async (event) => {
-    event.preventDefault()
-    const blogObject = JSON.stringify({
-      title: blogTitle,
-      author: blogAuthor,
-      url: blogUrl
-    })
+  const handleCreate = async (blogObject) => {
+   const convertedBlog = JSON.stringify(blogObject)
     console.log(blogObject)
     try {
       blogService.setToken(user.token)
-      const createdBlog = await blogService.createBlog(blogObject)
+      const createdBlog = await blogService.createBlog(convertedBlog)
       console.log(createdBlog)
       setBlogs(blogs.concat(createdBlog))
-      notifyWith(`${blogTitle} by ${blogAuthor} added!`)
+      notifyWith(`${blogObject.title} by ${blogObject.author} added!`)
       //TO-DO: hide CreateBlog form
     } catch (error) {
       console.error(error)
@@ -123,12 +118,6 @@ const App = () => {
 
       <Togglable buttonLabel="Add Blog">
         <CreateBlog
-          blogTitle={blogTitle}
-          updateBlogTitle={setBlogTitle}
-          blogAuthor={blogAuthor}
-          updateBlogAuthor={setBlogAuthor}
-          blogUrl={blogUrl}
-          updateBlogUrl={setBlogUrl}
           handleCreate={handleCreate}
           />
         </Togglable>

@@ -1,20 +1,37 @@
 import { useState } from 'react'
 
-const CreateBlog = ({ blogTitle, updateBlogTitle, blogAuthor, updateBlogAuthor, blogUrl, updateBlogUrl, handleCreate }) => {
+const CreateBlog = ({ handleCreate }) => {
 
-  const [newBlog, setNewBlog] = useState('')
+  //const [newBlog, setNewBlog] = useState('')
+  const [blogTitle, setBlogTitle] = useState('')
+  const [blogAuthor, setBlogAuthor] = useState('')
+  const [blogUrl, setBlogUrl] = useState('')
 
-  //TO-DO: Move new blog states to this component
+  const addBlog = (event) => {
+    event.preventDefault()
+    const blogObject = {
+      title: blogTitle,
+      author: blogAuthor,
+      url: blogUrl
+    }
+    // Call createBlog
+    handleCreate(blogObject)
+    
+    // reset blog form
+    setBlogTitle('')
+    setBlogAuthor('')
+    setBlogUrl('')
+  }
 
   return (
-    <form onSubmit={handleCreate}>
+    <form onSubmit={addBlog}>
       <h2>Create new blog:</h2>
       <div>title:
           <input
             type="text"
             value={blogTitle}
             name="blogTitle"
-            onChange={({ target }) => updateBlogTitle(target.value)} />
+            onChange={({ target }) => setBlogTitle(target.value)} />
       </div>
 
       <div>author:
@@ -22,7 +39,7 @@ const CreateBlog = ({ blogTitle, updateBlogTitle, blogAuthor, updateBlogAuthor, 
             type="text"
             value={blogAuthor}
             name="blogAuthor"
-            onChange={({ target}) => updateBlogAuthor(target.value)} />
+            onChange={({ target}) => setBlogAuthor(target.value)} />
       </div>
 
       <div>url:
@@ -30,7 +47,7 @@ const CreateBlog = ({ blogTitle, updateBlogTitle, blogAuthor, updateBlogAuthor, 
             type="text"
             value={blogUrl}
             name="blogUrl"
-            onChange={({ target }) => updateBlogUrl(target.value)} />
+            onChange={({ target }) => setBlogUrl(target.value)} />
       </div>
     <button type="submit">Create</button>
     </form>
