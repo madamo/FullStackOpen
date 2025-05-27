@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Blog from './components/Blog'
 import CreateBlog from './components/CreateBlog'
 import Login from './components/Login'
@@ -17,6 +17,8 @@ const App = () => {
   //const [blogAuthor, setBlogAuthor] = useState('')
   //const [blogUrl, setBlogUrl] = useState('')
   const [notification, setNotification] = useState({ message: null })
+
+  const createBlogRef = useRef()
 
   useEffect(() => {
     if (user !== null) {
@@ -87,6 +89,7 @@ const App = () => {
       console.log(createdBlog)
       setBlogs(blogs.concat(createdBlog))
       notifyWith(`${blogObject.title} by ${blogObject.author} added!`)
+      createBlogRef.current.toggleVisibility()
       //TO-DO: hide CreateBlog form
     } catch (error) {
       console.error(error)
@@ -116,7 +119,7 @@ const App = () => {
       <Notification notification={notification} />
       <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
 
-      <Togglable buttonLabel="Add Blog">
+      <Togglable buttonLabel="Add Blog" ref={createBlogRef}>
         <CreateBlog
           handleCreate={handleCreate}
           />
