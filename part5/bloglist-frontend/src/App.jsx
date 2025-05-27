@@ -24,7 +24,7 @@ const App = () => {
     if (user !== null) {
       blogService.setToken(user.token)
       blogService.getAll().then(blogs =>
-        setBlogs( blogs )
+        setBlogs( blogs.toSorted((a,b) => b.likes - a.likes) )
       ).catch(error => {
         console.log(error)
         console.log("use effect get")
