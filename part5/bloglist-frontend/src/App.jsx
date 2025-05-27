@@ -62,6 +62,7 @@ const App = () => {
       
       // Pass the token to the blog service to authenticate requests
       blogService.setToken(loggedInUser.token)
+      console.log(loggedInUser)
       
       // Save the logged in user data to state
       setUser(loggedInUser)
@@ -90,7 +91,6 @@ const App = () => {
       setBlogs(blogs.concat(createdBlog))
       notifyWith(`${blogObject.title} by ${blogObject.author} added!`)
       createBlogRef.current.toggleVisibility()
-      //TO-DO: hide CreateBlog form
     } catch (error) {
       console.error(error)
       notifyWith(`${error}`, true)
@@ -105,12 +105,25 @@ const App = () => {
       blogService.setToken(user.token)
       const updatedBlog = await blogService.updateBlog(id, convertedBlog)
       console.log(updatedBlog)
-      //console.log(blogs.findIndex((blog) => blog.id === id))
+
       const blogToUpdate = blogs.findIndex((blog) => blog.id === id)
       setBlogs(blogs.toSpliced(blogToUpdate, 1, updatedBlog))
-      //setBlogs(blogs.concat(updatedBlog))
-      //let newBlogs = await blogService.getAll()
-      //setBlogs(newBlogs)
+
+    } catch (error) {
+      console.error(error)
+      notifyWith(`${error}`, true)
+    }
+  }
+
+  const handleRemove = async (id) => {
+    console.log('removing blog', id)
+    try {
+      blogService.setToken(user.token)
+      const removedBlog = await blogService.removeBlog(id)
+      console.log(removedBlog)
+      notifyWith('blog removed')
+      const blogToRemove = blogs.findIndex((blog) => blog.id === id)
+      setBlogs(blogs.toSpliced(blogToRemove, 1))
     } catch (error) {
       console.error(error)
       notifyWith(`${error}`, true)
@@ -147,7 +160,7 @@ const App = () => {
 
       <div>
         {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} handleLike={handleLike} /> 
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} handleRemove={handleRemove} loggedInUser={user.username} /> 
         )}
       </div>
     </div>
