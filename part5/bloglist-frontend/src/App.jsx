@@ -97,6 +97,26 @@ const App = () => {
     }
   }
 
+  const handleLike = async (id, blogObject) => {
+    console.log('handling like for', blogObject)
+    console.log(id)
+    const convertedBlog = JSON.stringify(blogObject)
+    try {
+      blogService.setToken(user.token)
+      const updatedBlog = await blogService.updateBlog(id, convertedBlog)
+      console.log(updatedBlog)
+      //console.log(blogs.findIndex((blog) => blog.id === id))
+      const blogToUpdate = blogs.findIndex((blog) => blog.id === id)
+      setBlogs(blogs.toSpliced(blogToUpdate, 1, updatedBlog))
+      //setBlogs(blogs.concat(updatedBlog))
+      //let newBlogs = await blogService.getAll()
+      //setBlogs(newBlogs)
+    } catch (error) {
+      console.error(error)
+      notifyWith(`${error}`, true)
+    }
+  }
+
   if (user === null) {
     return (
       <div>
@@ -127,7 +147,7 @@ const App = () => {
 
       <div>
         {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} /> 
+          <Blog key={blog.id} blog={blog} handleLike={handleLike} /> 
         )}
       </div>
     </div>
