@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import PropTypes from  'prop-types'
 
 const CreateBlog = ({ handleCreate }) => {
 
@@ -52,6 +53,10 @@ const CreateBlog = ({ handleCreate }) => {
     <button type="submit">Create</button>
     </form>
   )
+}
+
+CreateBlog.propTypes = {
+  handleCreate: PropTypes.func.isRequired
 }
 
 export default CreateBlog
