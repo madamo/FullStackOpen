@@ -32,7 +32,9 @@ const CreateBlog = ({ handleCreate }) => {
             type="text"
             value={blogTitle}
             name="blogTitle"
+            placeholder="title"
             onChange={({ target }) => setBlogTitle(target.value)} />
+            
       </div>
 
       <div>author:
@@ -40,6 +42,7 @@ const CreateBlog = ({ handleCreate }) => {
             type="text"
             value={blogAuthor}
             name="blogAuthor"
+            placeholder="author"
             onChange={({ target}) => setBlogAuthor(target.value)} />
       </div>
 
@@ -48,6 +51,7 @@ const CreateBlog = ({ handleCreate }) => {
             type="text"
             value={blogUrl}
             name="blogUrl"
+            placeholder="url"
             onChange={({ target }) => setBlogUrl(target.value)} />
       </div>
     <button type="submit">Create</button>
