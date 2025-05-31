@@ -16,6 +16,10 @@ export default [
         sourceType: 'module',
       },
     },
+    extends: ["plugin:vitest-globals/recommended"],
+    env: {
+      'vitest-globals/env': true
+    },
     plugins: {
       'react-hooks': reactHooks,
       'react-refresh': reactRefresh,

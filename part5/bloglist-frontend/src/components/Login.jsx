@@ -7,6 +7,7 @@ const Login = ({ submitHandler, username, updateUsername, password, updatePasswo
             type="text"
             value={username}
             name="username"
+            data-testid="username"
             onChange={({ target }) => updateUsername(target.value)}
           />
       </div>
@@ -16,6 +17,7 @@ const Login = ({ submitHandler, username, updateUsername, password, updatePasswo
             type="password"
             value={password}
             name="password"
+            data-testid="password"
             onChange={({ target }) => updatePassword(target.value)}
           />
       </div>
