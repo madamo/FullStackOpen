@@ -1,4 +1,5 @@
 const { test, describe, expect, beforeEach } = require('@playwright/test')
+
 const { loginWith, createBlog, createManyBlogs } = require('./helper')
 const { create } = require('../../part4/bloglist/models/user')
 
@@ -90,18 +91,83 @@ describe('Blog app', () => {
 
       await expect(page.getByRole('button', {name: 'remove'})).not.toBeVisible()
     })
-
-    test('blogs are sorted by likes in descending order', async ({ page, request }) => {
-      // create a set of blogs
-      await createBlog(page, 'title 1', 'author 1', 'url1')
+  })
+  describe('When there are many blogs', () => {
+    /*beforeEach(async({ page, request }) => {
+      await loginWith(page, 'test', 'pw123')
+      await createBlog(page, 'title 1', 'author 1', 'urlone')
       await createBlog(page, 'title 2', 'author 2', 'url2')
-      await createBlog(page, 'title 3', 'author 3', 'url3')
+      await createBlog(page, 'title 3', 'author 3', 'urlthree')
+      await page.getByText('title 3 author 3').waitFor()
 
-      // add likes to the blogs
-      await page.getByRole('button', { name: 'show' }).click()
+      await page.getByRole('button', { name: 'show'}).first().click()
+      await page.getByRole('button', { name: 'like'}).click()
+      await page.getByText('likes 1').waitFor()
+      await page.getByRole('button', { name: 'like'}).click()
+      await page.getByText('likes 2').waitFor()
+      await page.getByRole('button', { name: 'hide'}).click()
+
+      await page.getByRole('button', { name: 'show' }).nth(1).click()
       await page.getByRole('button', { name: 'like' }).click()
+      await page.getByText('likes 1').waitFor()
+      await page.getByRole('button', { name: 'hide'}).click()
 
-      await expect(page.getByText('title 1')).toBeVisible()
+      await page.getByRole('button', { name: 'show' }).nth(2).click()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByText('likes 1').waitFor()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByText('likes 2').waitFor()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByText('likes 3').waitFor()
+      await page.getByRole('button', { name: 'hide'}).click()
+
+      await page.reload()
+
+    })*/
+
+    test('blogs are displayed by likes in descending order', async ({ page }) => {
+      await loginWith(page, 'test', 'pw123')
+
+      
+      await createBlog(page, 'title 1', 'author 1', 'urlone')
+      await createBlog(page, 'title 2', 'author 2', 'url2')
+      await createBlog(page, 'title 3', 'author 3', 'urlthree')
+      await page.getByText('title 3 author 3').waitFor()
+
+      await page.getByRole('button', { name: 'show'}).first().click()
+      await page.getByRole('button', { name: 'like'}).click()
+      await page.getByText('likes 1').waitFor()
+      await page.getByRole('button', { name: 'like'}).click()
+      await page.getByText('likes 2').waitFor()
+      await page.getByRole('button', { name: 'hide'}).click()
+
+      await page.getByRole('button', { name: 'show' }).nth(1).click()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByText('likes 1').waitFor()
+      await page.getByRole('button', { name: 'hide'}).click()
+
+      await page.getByRole('button', { name: 'show' }).nth(2).click()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByText('likes 1').nth(1).waitFor()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByText('likes 2').nth(1).waitFor()
+      await page.getByRole('button', { name: 'like' }).click()
+      await page.getByText('likes 3').waitFor()
+      await page.getByRole('button', { name: 'hide'}).click()
+
+      await page.reload()
+      await page.getByText('title 1').waitFor()
+
+      /*await expect(page.locator('.blog')).first().toHaveText('title 3')
+      await expect(page.locator('.blog')).nth(1).toHaveText('title 1')
+      await expect(page.locator('.blog')).nth(2).toHaveText('title 2')*/
+
+      const blogs = await page.locator('.blog').all()
+      console.log(blogs[0])
+
+      await expect(blogs[0]).toContainText('title 3')
+      await expect(blogs[1]).toContainText('title 1')
+      await expect(blogs[2]).toContainText('title 2')
     })
   })
 })
