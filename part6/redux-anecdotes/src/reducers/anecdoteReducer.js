@@ -35,17 +35,31 @@ const reducer = (state = initialState, action) => {
     }
     case 'ADD_NEW': {
       console.log("payload content", action.payload.content)
-      const newAnecdote = {
-        content: action.payload.content,
-        id: getId(),
-        votes: 0
-      }
-      return [...state, newAnecdote]
+      return [...state, action.payload]
     }
     default:
       return state
   }
+}
 
+export const createAnecdote = (content) => {
+  return {
+    type: 'ADD_NEW',
+    payload: {
+      content,
+      id: getId(),
+      votes: 0
+    }
+  }
+}
+
+export const incrementVote = (id) => {
+  return {
+    type: 'VOTE',
+    payload: {
+      id
+    }
+  }
 }
 
 export default reducer
