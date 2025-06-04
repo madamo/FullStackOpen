@@ -20,7 +20,7 @@ export const filterChange = filter => {
   */
 
 const initialState = {
-  filter: 'my filter'
+  filter: ''
 }
 
 const filterSlice = createSlice({
