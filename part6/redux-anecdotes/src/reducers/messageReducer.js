@@ -16,4 +16,15 @@ const messageSlice = createSlice({
 })
 
 export const { showMessage, removeMessage } = messageSlice.actions
+
+export const setNotification = (message, timeout) => {
+  return dispatch => {
+    dispatch(showMessage(message))
+    setTimeout(() => {
+      dispatch(removeMessage())
+
+    }, timeout*1000)
+  }
+}
+
 export default messageSlice.reducer
