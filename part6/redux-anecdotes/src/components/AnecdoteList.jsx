@@ -28,7 +28,7 @@ const AnecdoteList = () => {
   })
 
   const handleVote = (anecdote) => {
-    dispatch(incrementVote(anecdote.id))
+    dispatch(incrementVote(anecdote))
     dispatch(showMessage(`voted for ${anecdote.content}`))
     setTimeout(() => {
       dispatch(removeMessage())
