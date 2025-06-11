@@ -69,12 +69,14 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  const [contentReset, content] = useField('text')
+  const [authorReset, author] = useField('text')
+  const [infoReset, info] = useField('text')
+
+  console.log(contentReset)
+  console.log(content)
 
   const navigate = useNavigate()
-
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -86,6 +88,13 @@ const CreateNew = (props) => {
       id: Math.random()
     })
     navigate('/')
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    contentReset()
+    authorReset()
+    infoReset()
   }
 
   return (
@@ -105,6 +114,7 @@ const CreateNew = (props) => {
           <input name='info' {...info} />
         </div>
         <button>create</button>
+        <button type="button" onClick={handleReset}>reset</button>
       </form>
     </div>
   )
