@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
+const Blog = ({ blog }) => {
 
   const [visible, setVisible] = useState(false)
   //const [likes, setLikes] = useState(blog.likes)
@@ -16,7 +16,6 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
   const handleClick = () => {
     setVisible(!visible)
-    console.log(loggedInUser)
   }
 
   const addLike = (event) => {
@@ -50,8 +49,6 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
           </div>
           <div>{blog.user.name}</div>
         </div>
-
-        {loggedInUser === blog.user.username && <button onClick={removeBlog}>remove</button> }
         
     </div>
   )
