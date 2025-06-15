@@ -9,7 +9,7 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/messageReducer'
 import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import { initializeBlogs, createBlog, addLike } from './reducers/blogReducer'
 
 
 const App = () => {
@@ -84,10 +84,11 @@ const App = () => {
   }
 
   const handleLike = async (id, blogObject) => {
-    console.log('handling like for', blogObject)
-    console.log(id)
+    //console.log('handling like for', blogObject)
+    //console.log(id)
     const convertedBlog = JSON.stringify(blogObject)
-    try {
+    dispatch(addLike(user, convertedBlog))
+    /*try {
       blogService.setToken(user.token)
       const updatedBlog = await blogService.updateBlog(id, convertedBlog)
       console.log(updatedBlog)
@@ -98,7 +99,7 @@ const App = () => {
     } catch (error) {
       console.error(error)
       setNotification((`${error}`, true, 5))
-    }
+    }*/
   }
 
   const handleRemove = async (id) => {
