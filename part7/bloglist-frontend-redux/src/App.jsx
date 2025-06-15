@@ -86,8 +86,9 @@ const App = () => {
   const handleLike = async (id, blogObject) => {
     //console.log('handling like for', blogObject)
     //console.log(id)
-    const convertedBlog = JSON.stringify(blogObject)
-    dispatch(addLike(user, convertedBlog))
+    //TO-DO: stringify somewhere else
+    //const convertedBlog = JSON.stringify(blogObject)
+    dispatch(addLike(user, blogObject))
     /*try {
       blogService.setToken(user.token)
       const updatedBlog = await blogService.updateBlog(id, convertedBlog)
@@ -144,7 +145,7 @@ const App = () => {
           />
       </Togglable>
 
-      <BlogList />
+      <BlogList handleLike={handleLike} />
     </div>
   )
 }

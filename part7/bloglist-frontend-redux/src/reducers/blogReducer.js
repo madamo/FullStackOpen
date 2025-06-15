@@ -46,13 +46,16 @@ export const createBlog = (user, content) => {
 
 export const addLike = (user, blog) => {
   return async dispatch => {
+    console.log(blog)
     const changedBlog = {
       ...blog, likes: blog.likes + 1
     }
+
+    console.log(changedBlog)
     
     blogService.setToken(user.token)
     
-    const updatedBlog = await blogService.updateBlog(blog)
+    const updatedBlog = await blogService.updateBlog(changedBlog)
     dispatch(updateBlog(updatedBlog))
   }
 }

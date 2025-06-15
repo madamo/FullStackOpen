@@ -29,7 +29,7 @@ const createBlog = async (blogObject) => {
   return response.data
 }
 
-const updateBlog = async (id, blogObject) => {
+const updateBlog = async (blogObject) => {
   const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -37,7 +37,9 @@ const updateBlog = async (id, blogObject) => {
     }
   }
 
-  const response = await axios.put(`${baseUrl}/${id}`, blogObject, config)
+  console.log('blog to update', blogObject)
+
+  const response = await axios.put(`${baseUrl}/${blogObject.id}`, blogObject, config)
   return response.data
 }
 

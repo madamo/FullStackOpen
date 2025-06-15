@@ -1,8 +1,11 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { addLike } from '../reducers/blogReducer'
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handleLike }) => {
 
   const [visible, setVisible] = useState(false)
+  const dispatch = useDispatch()
   //const [likes, setLikes] = useState(blog.likes)
 
   const showElement = { display: visible ? '' : 'none' }
@@ -18,16 +21,20 @@ const Blog = ({ blog }) => {
     setVisible(!visible)
   }
 
-  const addLike = (event) => {
+  const updateLikes = (event) => {
     event.preventDefault()
     const blogObject = {
+      id: blog.id,
       user: blog.user.id,
       author: blog.author,
       title: blog.title,
       url: blog.url,
-      likes: blog.likes + 1
+      likes: blog.likes
     }
-    console.log(blog.likes + 1)
+
+    //dispatch(addLike())
+
+    //console.log(blog.likes + 1)
     handleLike(blog.id, blogObject)
   }
 
@@ -45,7 +52,7 @@ const Blog = ({ blog }) => {
         <div style={showElement} className="blog-details">
           <div><a href={`${blog.url}`}>{blog.url}</a></div>
           <div>likes {blog.likes}
-            <button onClick={addLike}>like</button>
+            <button onClick={updateLikes}>like</button>
           </div>
           <div>{blog.user.name}</div>
         </div>
