@@ -1,12 +1,13 @@
 const Notification = ({ notification }) => {
-  const { message, isError } = notification
+  //const { message, isError } = notification
 
-  if (!message) {
+  if (!notification) {
     return null
   }
 
   const style = {
-    color: isError ? 'red' : 'green',
+    color: notification.isError ? 'red' : 'green',
+    //color: 'purple',
     background: 'lightgrey',
     fontSize: 20,
     borderStyle: 'solid',
@@ -17,7 +18,7 @@ const Notification = ({ notification }) => {
 
   return (
       <div style={style}>
-          {message}
+          {notification.message}
       </div>
   )
 }

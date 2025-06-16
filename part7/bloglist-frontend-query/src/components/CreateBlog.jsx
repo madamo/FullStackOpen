@@ -1,4 +1,8 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { useMutation, useQueryClient }  from '@tanstack/react-query'
+import NotificationContext from '../NotificationContext'
+import { createBlog } from '../requests'
+
 import PropTypes from  'prop-types'
 
 const CreateBlog = ({ handleCreate }) => {
@@ -8,6 +12,31 @@ const CreateBlog = ({ handleCreate }) => {
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')
 
+  const [notification, notificationDispatch] = useContext(NotificationContext)
+
+  const queryClient = useQueryClient()
+
+  const newBlogMutation = useMutation({
+    mutationFn: createBlog,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['blogs' ]})
+      // TO-DO: notfications
+      notificationDispatch({ type: 'SET_MESSAGE', payload: {message: `anecdote ${data.title} created`, isError: false}})
+      setTimeout(() => {
+        notificationDispatch({ type: 'CLEAR_MESSAGE'})
+      }, 5000)
+    },
+    onError: (error) => {
+      console.log(error.response.status)
+      if (error.response.status === 400) {
+        notificationDispatch({ type: 'SET_MESSAGE', payload: {message: `error creating anecdote`, isError: true}})
+        setTimeout(() => {
+          notificationDispatch({ type: 'CLEAR_MESSAGE'})
+        }, 5000)
+      }
+    }
+  })
+
   const addBlog = (event) => {
     event.preventDefault()
     const blogObject = {
@@ -16,7 +45,8 @@ const CreateBlog = ({ handleCreate }) => {
       url: blogUrl
     }
     // Call createBlog
-    handleCreate(blogObject)
+    //handleCreate(blogObject)
+    newBlogMutation.mutate(blogObject)
     
     // reset blog form
     setBlogTitle('')

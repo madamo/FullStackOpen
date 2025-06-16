@@ -16,7 +16,7 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
   const handleClick = () => {
     setVisible(!visible)
-    console.log(loggedInUser)
+    //console.log(loggedInUser)
   }
 
   const addLike = (event) => {

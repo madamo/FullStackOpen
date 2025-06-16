@@ -1,34 +1,46 @@
-import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
+import { useState, useEffect, useRef, useReducer } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+//import Blog from './components/Blog'
+import BlogList from './components/BlogList'
 import CreateBlog from './components/CreateBlog'
 import Login from './components/Login'
 import Notification from './components/Notification'
+import NotificationContext from './NotificationContext'
 import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { setToken } from './requests'
+
+const notificationReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_MESSAGE":
+      console.log('setting message...')
+      return action.payload
+    case "CLEAR_MESSAGE":
+      console.log('removing message')
+      return ''
+    default:
+      return state
+  }
+}
 
 
 const App = () => {
-  const [blogs, setBlogs] = useState([])
+  const queryClient = useQueryClient()
+  //const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
   //const [blogTitle, setBlogTitle] = useState('')
   //const [blogAuthor, setBlogAuthor] = useState('')
   //const [blogUrl, setBlogUrl] = useState('')
-  const [notification, setNotification] = useState({ message: null })
+  const [notification, notificationDispatch] = useReducer(notificationReducer, '')
 
   const createBlogRef = useRef()
 
   useEffect(() => {
     if (user !== null) {
-      blogService.setToken(user.token)
-      blogService.getAll().then(blogs =>
-        setBlogs( blogs.toSorted((a,b) => b.likes - a.likes) )
-      ).catch(error => {
-        console.log(error)
-        console.log("use effect get")
-      })
+      setToken(user.token)
     }
   }, [user])
 
@@ -38,17 +50,9 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
       setUser(user)
-      blogService.setToken(user.token)
+      setToken(user.token)
     }
   }, [])
-
-  //TO-DO: notification
-  const notifyWith = (message, isError = false) => {
-    setNotification({ message, isError })
-    setTimeout(() => {
-      setNotification({ message: null })
-    }, 5000)
-  }
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -61,7 +65,7 @@ const App = () => {
       window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedInUser))
       
       // Pass the token to the blog service to authenticate requests
-      blogService.setToken(loggedInUser.token)
+      setToken(loggedInUser.token)
       console.log(loggedInUser)
       
       // Save the logged in user data to state
@@ -72,7 +76,10 @@ const App = () => {
       setPassword('')
     } catch (error) {
       console.error(error)
-      notifyWith(`Invalid username or password`, true)
+      notificationDispatch({ type: 'SET_MESSAGE', payload: { message: 'Invalid username or password', isError: true }})
+      setTimeout(() => {
+        notificationDispatch({ type: 'CLEAR_MESSAGE' })
+      }, 5000)
     }
   }
 
@@ -132,21 +139,25 @@ const App = () => {
 
   if (user === null) {
     return (
-      <div>
-        <Notification notification={notification} />
+      <NotificationContext.Provider value={[notification, notificationDispatch]}>
+        <div>
+          <Notification notification={notification} />
 
-        <Login 
-          submitHandler={handleLogin}
-          username={username} 
-          updateUsername={setUsername} 
-          password={password}
-          updatePassword={setPassword} 
-        />
-      </div> 
+          <Login 
+            submitHandler={handleLogin}
+            username={username} 
+            updateUsername={setUsername} 
+            password={password}
+            updatePassword={setPassword} 
+          />
+        </div> 
+      </NotificationContext.Provider>
     )
   }
 
   return (
+    <NotificationContext.Provider value={[notification, notificationDispatch]}>
+
     <div>
       <h2>Blogs</h2>
       <Notification notification={notification} />
@@ -158,12 +169,10 @@ const App = () => {
           />
         </Togglable>
 
-      <div>
-        {blogs.map(blog => 
-          <Blog key={blog.id} blog={blog} handleLike={handleLike} handleRemove={handleRemove} loggedInUser={user.username} /> 
-        )}
-      </div>
+      <BlogList />
     </div>
+    </NotificationContext.Provider>
+
   )
 }
 
