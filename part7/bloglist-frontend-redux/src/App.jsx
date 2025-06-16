@@ -7,18 +7,24 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/messageReducer'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { initializeBlogs, createBlog, addLike, deleteBlog } from './reducers/blogReducer'
+import { initializeUser, setUser, logoutUser } from './reducers/userReducer'
 
 
 const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
+  //const [user, setUser] = useState(null)
   
   const createBlogRef = useRef()
 
   const dispatch = useDispatch()
+
+  const user = useSelector(state => {
+    window.localStorage.setItem('loggedBlogappUser', JSON.stringify(state.user))
+    return state.user
+  })
 
   useEffect(() => {
     if (user !== null) {
@@ -26,32 +32,33 @@ const App = () => {
     }
   }, [user])
 
-  useEffect(() => {
+  /*useEffect(() => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
 
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON)
-      setUser(user)
+      dispatch(setUser(user))
       blogService.setToken(user.token)
     }
-  }, [])
+  }, [])*/
 
   const handleLogin = async (event) => {
     event.preventDefault()
     console.log('logging in with ', username, password)
     try {
       // Send username and password to login service to check credentials and get token
-      const loggedInUser = await loginService.login({ username, password })
+      //const loggedInUser = await loginService.login({ username, password })
 
       // Save user data to local storage
-      window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedInUser))
+      //window.localStorage.setItem('loggedBlogappUser', JSON.stringify(loggedInUser))
       
       // Pass the token to the blog service to authenticate requests
-      blogService.setToken(loggedInUser.token)
-      console.log(loggedInUser)
+      //blogService.setToken(loggedInUser.token)
+      //console.log(loggedInUser)
       
       // Save the logged in user data to state
-      setUser(loggedInUser)
+      //setUser(loggedInUser)
+      dispatch(initializeUser(username, password))
       
       // Reset the username and password
       setUsername('')
@@ -64,7 +71,8 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
+    //setUser(null)
+    dispatch(logoutUser())
   }
 
   const handleCreate = async (blogObject) => {
@@ -77,14 +85,14 @@ const App = () => {
     }
   }
 
-  const handleLike = async (id, blogObject) => {
+  /*const handleLike = async (id, blogObject) => {
     dispatch(addLike(user, blogObject))
-  }
+  }*/
 
-  const handleRemove = async (blog) => {
+  /*const handleRemove = async (blog) => {
     dispatch(deleteBlog(user, blog))
     dispatch(setNotification(`${blog.title} removed`, false, 5))
-  }
+  }*/
 
   if (user === null) {
     return (
@@ -113,7 +121,7 @@ const App = () => {
           />
       </Togglable>
 
-      <BlogList handleLike={handleLike} loggedInUser={user.username} handleRemove={handleRemove} />
+      <BlogList loggedInUser={user.username} />
     </div>
   )
 }

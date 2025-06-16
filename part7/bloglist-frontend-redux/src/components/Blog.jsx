@@ -1,11 +1,14 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
-//import { addLike } from '../reducers/blogReducer'
+import { useDispatch, useSelector } from 'react-redux'
+import { addLike, deleteBlog } from '../reducers/blogReducer'
+import { setNotification } from '../reducers/messageReducer'
 
-const Blog = ({ blog, handleLike, loggedInUser, handleRemove }) => {
+
+const Blog = ({ blog }) => {
 
   const [visible, setVisible] = useState(false)
   const dispatch = useDispatch()
+  const user = useSelector(state => state.user)
 
   const showElement = { display: visible ? '' : 'none' }
   const blogStyle = {
@@ -31,17 +34,15 @@ const Blog = ({ blog, handleLike, loggedInUser, handleRemove }) => {
       likes: blog.likes
     }
 
-    //dispatch(addLike())
-
-    //console.log(blog.likes + 1)
-    handleLike(blog.id, blogObject)
+    dispatch(addLike(user, blogObject))
   }
 
   const removeBlog = (event) => {
     event.preventDefault()
     console.log(blog)
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      handleRemove(blog)
+      dispatch(deleteBlog(user, blog))
+      dispatch(setNotification(`${blog.title} removed`, false, 5))
     }
   }
   
@@ -57,7 +58,7 @@ const Blog = ({ blog, handleLike, loggedInUser, handleRemove }) => {
           <div>{blog.user.name}</div>
         </div>
         
-        {loggedInUser === blog.user.username && <button onClick={removeBlog}>remove</button> }
+        {user.username === blog.user.username && <button onClick={removeBlog}>remove</button> }
 
     </div>
   )

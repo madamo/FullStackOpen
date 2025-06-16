@@ -42,6 +42,7 @@ export const createBlog = (user, content) => {
       blogService.setToken(user.token)
       const newBlog = await blogService.createBlog(blogToAdd)
       dispatch(appendBlog(newBlog))
+      dispatch(setNotification(`${content.title} added!`, false, 5))
     } catch (error) {
       console.error(error)
       dispatch(setNotification(`${error}`, true, 5))
