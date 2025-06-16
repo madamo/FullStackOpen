@@ -43,7 +43,7 @@ const updateBlog = async (blogObject) => {
   return response.data
 }
 
-const removeBlog = async (id) => {
+const removeBlog = async (blog) => {
     const config = {
     headers: {
       'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ const removeBlog = async (id) => {
     }
   }
 
-  const response = await axios.delete(`${baseUrl}/${id}`, config)
+  const response = await axios.delete(`${baseUrl}/${blog.id}`, config)
   return response.data
 }
 

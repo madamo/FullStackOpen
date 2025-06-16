@@ -1,5 +1,4 @@
 import { useState, useEffect, useRef } from 'react'
-import Blog from './components/Blog'
 import BlogList from './components/BlogList'
 import CreateBlog from './components/CreateBlog'
 import Login from './components/Login'
@@ -8,20 +7,15 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification } from './reducers/messageReducer'
-import { useDispatch, useSelector } from 'react-redux'
-import { initializeBlogs, createBlog, addLike } from './reducers/blogReducer'
+import { useDispatch } from 'react-redux'
+import { initializeBlogs, createBlog, addLike, deleteBlog } from './reducers/blogReducer'
 
 
 const App = () => {
-  //const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  //const [blogTitle, setBlogTitle] = useState('')
-  //const [blogAuthor, setBlogAuthor] = useState('')
-  //const [blogUrl, setBlogUrl] = useState('')
-  //const [notification, setNotification] = useState({ message: null })
-
+  
   const createBlogRef = useRef()
 
   const dispatch = useDispatch()
@@ -84,38 +78,12 @@ const App = () => {
   }
 
   const handleLike = async (id, blogObject) => {
-    //console.log('handling like for', blogObject)
-    //console.log(id)
-    //TO-DO: stringify somewhere else
-    //const convertedBlog = JSON.stringify(blogObject)
     dispatch(addLike(user, blogObject))
-    /*try {
-      blogService.setToken(user.token)
-      const updatedBlog = await blogService.updateBlog(id, convertedBlog)
-      console.log(updatedBlog)
-
-      const blogToUpdate = blogs.findIndex((blog) => blog.id === id)
-      setBlogs(blogs.toSpliced(blogToUpdate, 1, updatedBlog))
-
-    } catch (error) {
-      console.error(error)
-      setNotification((`${error}`, true, 5))
-    }*/
   }
 
-  const handleRemove = async (id) => {
-    console.log('removing blog', id)
-    try {
-      blogService.setToken(user.token)
-      const removedBlog = await blogService.removeBlog(id)
-      console.log(removedBlog)
-      dispatch(setNotification('blog removed', false, 5))
-      const blogToRemove = blogs.findIndex((blog) => blog.id === id)
-      setBlogs(blogs.toSpliced(blogToRemove, 1))
-    } catch (error) {
-      console.error(error)
-      dispatch(setNotification(`${error}`, true, 5))
-    }
+  const handleRemove = async (blog) => {
+    dispatch(deleteBlog(user, blog))
+    dispatch(setNotification(`${blog.title} removed`, false, 5))
   }
 
   if (user === null) {
@@ -145,7 +113,7 @@ const App = () => {
           />
       </Togglable>
 
-      <BlogList handleLike={handleLike} />
+      <BlogList handleLike={handleLike} loggedInUser={user.username} handleRemove={handleRemove} />
     </div>
   )
 }
