@@ -1,9 +1,39 @@
-import { useState } from 'react'
+import { useState, useContext } from 'react'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { updateBlog, removeBlog } from '../requests'
+import NotificationContext from '../NotificationContext'
 
 const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
   const [visible, setVisible] = useState(false)
-  //const [likes, setLikes] = useState(blog.likes)
+  const queryClient = useQueryClient()
+  const [notification, notificationDispatch] = useContext(NotificationContext)
+
+
+  const updateLikesMutation = useMutation({
+    mutationFn: updateBlog,
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      notificationDispatch({ type: 'SET_MESSAGE', payload: { message: `${data.title} liked!`, isError: false }})
+      setTimeout(() => {
+        notificationDispatch({ type: 'CLEAR_MESSAGE' })
+      }, 5000)
+    },
+    onError: (error) => {
+      console.log(error)
+    }
+  })
+
+  const removeBlogMutation = useMutation({
+    mutationFn: removeBlog,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      notificationDispatch({ type: 'SET_MESSAGE', payload: { message: `blog removed!`, isError: false }})
+      setTimeout(() => {
+        notificationDispatch({ type: 'CLEAR_MESSAGE' })
+      }, 5000)
+    }
+  })
 
   const showElement = { display: visible ? '' : 'none' }
   const blogStyle = {
@@ -21,21 +51,23 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
   const addLike = (event) => {
     event.preventDefault()
-    const blogObject = {
+    /*const blogObject = {
       user: blog.user.id,
       author: blog.author,
       title: blog.title,
       url: blog.url,
       likes: blog.likes + 1
-    }
+    }*/
     console.log(blog.likes + 1)
-    handleLike(blog.id, blogObject)
+    //handleLike(blog.id, blogObject)
+    updateLikesMutation.mutate({ ...blog, likes: blog.likes + 1})
   }
 
-  const removeBlog = (event) => {
+  const handleRemoveBlog = (event) => {
     event.preventDefault()
     if (window.confirm(`Remove blog ${blog.title} by ${blog.author}?`)) {
-      handleRemove(blog.id)
+      //handleRemove(blog.id)
+      removeBlogMutation.mutate(blog.id)
     }
   }
   
@@ -51,7 +83,7 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
           <div>{blog.user.name}</div>
         </div>
 
-        {loggedInUser === blog.user.username && <button onClick={removeBlog}>remove</button> }
+        {loggedInUser === blog.user.username && <button onClick={handleRemoveBlog}>remove</button> }
         
     </div>
   )

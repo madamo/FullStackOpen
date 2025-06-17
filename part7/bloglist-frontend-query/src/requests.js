@@ -22,7 +22,7 @@ export const getBlogs = async () => {
   const config = {
     headers: { Authorization: token }
   }
-  console.log(`getting blogs with token ${token}...`)
+  //console.log(`getting blogs with token ${token}...`)
   const result = await axios.get(baseUrl, config)
   return result.data
 }
@@ -37,5 +37,29 @@ export const createBlog = async (blogObject) => {
     }
   }
   const response = await axios.post(baseUrl, blogObject, config)
+  return response.data
+}
+
+export const updateBlog = async (blogObject) => {
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token 
+    }
+  }
+
+  const response = await axios.put(`${baseUrl}/${blogObject.id}`, blogObject, config)
+  return response.data
+}
+
+export const removeBlog = async (id) => {
+    const config = {
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': token 
+    }
+  }
+
+  const response = await axios.delete(`${baseUrl}/${id}`, config)
   return response.data
 }

@@ -169,7 +169,7 @@ const App = () => {
           />
         </Togglable>
 
-      <BlogList />
+      <BlogList loggedInUser={user.username} />
     </div>
     </NotificationContext.Provider>
 
