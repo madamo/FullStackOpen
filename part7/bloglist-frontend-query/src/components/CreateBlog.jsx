@@ -5,9 +5,8 @@ import { createBlog } from '../requests'
 
 import PropTypes from  'prop-types'
 
-const CreateBlog = ({ handleCreate }) => {
+const CreateBlog = () => {
 
-  //const [newBlog, setNewBlog] = useState('')
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
   const [blogUrl, setBlogUrl] = useState('')

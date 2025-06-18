@@ -1,15 +1,14 @@
 import { useState, useEffect, useRef, useReducer } from 'react'
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-//import Blog from './components/Blog'
+import { useQueryClient } from '@tanstack/react-query'
 import BlogList from './components/BlogList'
 import CreateBlog from './components/CreateBlog'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import NotificationContext from './NotificationContext'
 import Togglable from './components/Togglable'
-import blogService from './services/blogs'
 import loginService from './services/login'
 import { setToken } from './requests'
+import UserContext from './UserContext'
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
@@ -24,17 +23,26 @@ const notificationReducer = (state, action) => {
   }
 }
 
+const userReducer = (state, action) => {
+  switch(action.type) {
+    case "LOGIN":
+      console.log('logging in')
+      return action.payload
+    case "LOGOUT":
+      console.log('logging out')
+      return null
+    default:
+      return state
+  }
+}
+
 
 const App = () => {
   const queryClient = useQueryClient()
-  //const [blogs, setBlogs] = useState([])
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [user, setUser] = useState(null)
-  //const [blogTitle, setBlogTitle] = useState('')
-  //const [blogAuthor, setBlogAuthor] = useState('')
-  //const [blogUrl, setBlogUrl] = useState('')
   const [notification, notificationDispatch] = useReducer(notificationReducer, '')
+  const [user, userDispatch] = useReducer(userReducer, null)
 
   const createBlogRef = useRef()
 
@@ -48,9 +56,9 @@ const App = () => {
     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
 
     if (loggedUserJSON) {
-      const user = JSON.parse(loggedUserJSON)
-      setUser(user)
-      setToken(user.token)
+      const currentUser = JSON.parse(loggedUserJSON)
+      userDispatch({ type: 'LOGIN', payload: { username: currentUser.username, name: currentUser.name, token: currentUser.token }})
+      setToken(currentUser.token)
     }
   }, [])
 
@@ -69,7 +77,7 @@ const App = () => {
       console.log(loggedInUser)
       
       // Save the logged in user data to state
-      setUser(loggedInUser)
+      userDispatch({ type: 'LOGIN', payload: { username: loggedInUser.username, name: loggedInUser.name, token: loggedInUser.token }})
       
       // Reset the username and password
       setUsername('')
@@ -85,56 +93,7 @@ const App = () => {
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
-    setUser(null)
-  }
-
-  const handleCreate = async (blogObject) => {
-   const convertedBlog = JSON.stringify(blogObject)
-    console.log(blogObject)
-    try {
-      blogService.setToken(user.token)
-      const createdBlog = await blogService.createBlog(convertedBlog)
-      console.log(createdBlog)
-      setBlogs(blogs.concat(createdBlog))
-      notifyWith(`${blogObject.title} by ${blogObject.author} added!`)
-      createBlogRef.current.toggleVisibility()
-    } catch (error) {
-      console.error(error)
-      notifyWith(`${error}`, true)
-    }
-  }
-
-  const handleLike = async (id, blogObject) => {
-    console.log('handling like for', blogObject)
-    console.log(id)
-    const convertedBlog = JSON.stringify(blogObject)
-    try {
-      blogService.setToken(user.token)
-      const updatedBlog = await blogService.updateBlog(id, convertedBlog)
-      console.log(updatedBlog)
-
-      const blogToUpdate = blogs.findIndex((blog) => blog.id === id)
-      setBlogs(blogs.toSpliced(blogToUpdate, 1, updatedBlog))
-
-    } catch (error) {
-      console.error(error)
-      notifyWith(`${error}`, true)
-    }
-  }
-
-  const handleRemove = async (id) => {
-    console.log('removing blog', id)
-    try {
-      blogService.setToken(user.token)
-      const removedBlog = await blogService.removeBlog(id)
-      console.log(removedBlog)
-      notifyWith('blog removed')
-      const blogToRemove = blogs.findIndex((blog) => blog.id === id)
-      setBlogs(blogs.toSpliced(blogToRemove, 1))
-    } catch (error) {
-      console.error(error)
-      notifyWith(`${error}`, true)
-    }
+    userDispatch({ type: 'LOGOUT' })
   }
 
   if (user === null) {
@@ -157,20 +116,19 @@ const App = () => {
 
   return (
     <NotificationContext.Provider value={[notification, notificationDispatch]}>
+      <UserContext.Provider value={user}>
+        <div>
+          <h2>Blogs</h2>
+          <Notification notification={notification} />
+          <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
 
-    <div>
-      <h2>Blogs</h2>
-      <Notification notification={notification} />
-      <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
+          <Togglable buttonLabel="Add Blog" ref={createBlogRef}>
+            <CreateBlog />
+            </Togglable>
 
-      <Togglable buttonLabel="Add Blog" ref={createBlogRef}>
-        <CreateBlog
-          handleCreate={handleCreate}
-          />
-        </Togglable>
-
-      <BlogList loggedInUser={user.username} />
-    </div>
+          <BlogList loggedInUser={user.username} />
+        </div>
+      </UserContext.Provider>
     </NotificationContext.Provider>
 
   )

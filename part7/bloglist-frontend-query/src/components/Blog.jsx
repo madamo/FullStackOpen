@@ -2,13 +2,15 @@ import { useState, useContext } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateBlog, removeBlog } from '../requests'
 import NotificationContext from '../NotificationContext'
+import UserContext from '../UserContext'
 
 const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
   const [visible, setVisible] = useState(false)
   const queryClient = useQueryClient()
   const [notification, notificationDispatch] = useContext(NotificationContext)
-
+  const user = useContext(UserContext)
+  console.log(user)
 
   const updateLikesMutation = useMutation({
     mutationFn: updateBlog,
@@ -83,7 +85,7 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
           <div>{blog.user.name}</div>
         </div>
 
-        {loggedInUser === blog.user.username && <button onClick={handleRemoveBlog}>remove</button> }
+        {user.username === blog.user.username && <button onClick={handleRemoveBlog}>remove</button> }
         
     </div>
   )
