@@ -9,6 +9,7 @@ import Togglable from './components/Togglable'
 import loginService from './services/login'
 import { setToken } from './requests'
 import UserContext from './UserContext'
+import { BrowserRouter as Router } from 'react-router-dom'
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
