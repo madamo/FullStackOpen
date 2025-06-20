@@ -9,7 +9,11 @@ import Togglable from './components/Togglable'
 import loginService from './services/login'
 import { setToken } from './requests'
 import UserContext from './UserContext'
-import { BrowserRouter as Router } from 'react-router-dom'
+import { 
+  Routes,
+  Route,
+  Link
+ } from 'react-router-dom'
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
@@ -97,6 +101,14 @@ const App = () => {
     userDispatch({ type: 'LOGOUT' })
   }
 
+  const Users = () => {
+    return (
+      <div>
+        <p>Here is the user page</p>
+      </div>
+    )
+  }
+
   if (user === null) {
     return (
       <NotificationContext.Provider value={[notification, notificationDispatch]}>
@@ -122,16 +134,16 @@ const App = () => {
           <h2>Blogs</h2>
           <Notification notification={notification} />
           <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
-
+          <Routes>
+            <Route path="/users" element={ <Users /> } />
+            <Route path="/" element={ <BlogList loggedInUser={user.username} /> } />
+          </Routes>
           <Togglable buttonLabel="Add Blog" ref={createBlogRef}>
             <CreateBlog />
-            </Togglable>
-
-          <BlogList loggedInUser={user.username} />
+          </Togglable>
         </div>
       </UserContext.Provider>
     </NotificationContext.Provider>
-
   )
 }
 
