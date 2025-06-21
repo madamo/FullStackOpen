@@ -102,9 +102,23 @@ const App = () => {
   }
 
   const Users = () => {
+
+    const userList = [
+      {
+        name: "user name",
+        id: 1
+      },
+      {
+        name: "user name 2",
+        id: 2
+      }
+    ]
     return (
       <div>
         <p>Here is the user page</p>
+        {userList.map(user => 
+          <li key={user.id}>{user.name}</li>
+        )}
       </div>
     )
   }
