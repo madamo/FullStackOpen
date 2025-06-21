@@ -115,7 +115,7 @@ const App = () => {
     ]
     return (
       <div>
-        <p>Here is the user page</p>
+        <h2>Users</h2>
         {userList.map(user => 
           <li key={user.id}>{user.name}</li>
         )}
