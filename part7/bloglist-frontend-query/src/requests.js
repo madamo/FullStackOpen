@@ -65,3 +65,13 @@ export const removeBlog = async (id) => {
   const response = await axios.delete(`${baseUrl}/${id}`, config)
   return response.data
 }
+
+export const getUsers = async () => {
+  console.log('getting users...')
+  const config = {
+    headers: { Authorization: token }
+  }
+  console.log(`getting blogs with token ${token}...`)
+  const result = await axios.get('/api/users', config)
+  return result.data
+}

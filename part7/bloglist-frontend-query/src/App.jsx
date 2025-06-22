@@ -1,19 +1,18 @@
-import { useState, useEffect, useRef, useReducer } from 'react'
-import { useQueryClient } from '@tanstack/react-query'
+import { useState, useEffect, useReducer } from 'react'
+import { useQuery, useQueryClient } from '@tanstack/react-query'
 import BlogList from './components/BlogList'
-import CreateBlog from './components/CreateBlog'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import NotificationContext from './NotificationContext'
-import Togglable from './components/Togglable'
 import loginService from './services/login'
-import { setToken } from './requests'
+import { setToken, getUsers } from './requests'
 import UserContext from './UserContext'
 import { 
   Routes,
   Route,
   Link
  } from 'react-router-dom'
+
 
 const notificationReducer = (state, action) => {
   switch (action.type) {
@@ -48,8 +47,6 @@ const App = () => {
   const [password, setPassword] = useState('')
   const [notification, notificationDispatch] = useReducer(notificationReducer, '')
   const [user, userDispatch] = useReducer(userReducer, null)
-
-  const createBlogRef = useRef()
 
   useEffect(() => {
     if (user !== null) {
@@ -103,21 +100,44 @@ const App = () => {
 
   const Users = () => {
 
-    const userList = [
-      {
-        name: "user name",
-        id: 1
-      },
-      {
-        name: "user name 2",
-        id: 2
+    const queryClient = useQueryClient()
+
+    const users = useQuery({
+        queryKey: ['users'],
+        placeholderData: [],
+        queryFn: getUsers,
+        retry: false
+      })
+    const userList = users.data
+
+      const liStyle = {
+        listStyle: 'none',
+        display: 'flex',
+        width: '100%',
+        justifyContent: 'space-between'
       }
-    ]
+
+      const divStyle = {
+      }
+
+      const columnLabel = {
+        width: '100%',
+        textAlign: 'right'
+      }
+
+      const containerStyle = {
+        width: '250px'
+      }
+
     return (
-      <div>
+      <div style={containerStyle}>
         <h2>Users</h2>
+        <div style={columnLabel}><b>blogs created</b></div>
         {userList.map(user => 
-          <li key={user.id}>{user.name}</li>
+          <li key={user.id} style={liStyle}>
+            <div style={divStyle}>{user.name}</div>
+            <div style={divStyle}>{user.blogs.length}</div>
+          </li>
         )}
       </div>
     )
@@ -152,9 +172,6 @@ const App = () => {
             <Route path="/users" element={ <Users /> } />
             <Route path="/" element={ <BlogList loggedInUser={user.username} /> } />
           </Routes>
-          <Togglable buttonLabel="Add Blog" ref={createBlogRef}>
-            <CreateBlog />
-          </Togglable>
         </div>
       </UserContext.Provider>
     </NotificationContext.Provider>
