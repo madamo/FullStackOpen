@@ -5,7 +5,7 @@ import { createBlog } from '../requests'
 
 import PropTypes from  'prop-types'
 
-const CreateBlog = () => {
+const CreateBlog = ({ toggleCreate }) => {
 
   const [blogTitle, setBlogTitle] = useState('')
   const [blogAuthor, setBlogAuthor] = useState('')
@@ -51,6 +51,8 @@ const CreateBlog = () => {
     setBlogTitle('')
     setBlogAuthor('')
     setBlogUrl('')
+    toggleCreate.current.toggleVisibility()
+
   }
 
   return (

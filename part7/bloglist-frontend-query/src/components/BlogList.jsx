@@ -13,7 +13,6 @@ const BlogList = ({ loggedInUser }) => {
 
   const createBlogRef = useRef()
 
-
   const result = useQuery({
       queryKey: ['blogs'],
       placeholderData: [],
@@ -34,7 +33,7 @@ const BlogList = ({ loggedInUser }) => {
           <Blog key={blog.id} blog={blog} loggedInUser={loggedInUser} /> 
         )}
           <Togglable buttonLabel="Add Blog" ref={createBlogRef}>
-            <CreateBlog />
+            <CreateBlog toggleCreate={createBlogRef} />
           </Togglable>
       </div>
   )

@@ -10,7 +10,6 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
   const queryClient = useQueryClient()
   const [notification, notificationDispatch] = useContext(NotificationContext)
   const user = useContext(UserContext)
-  console.log(user)
 
   const updateLikesMutation = useMutation({
     mutationFn: updateBlog,
