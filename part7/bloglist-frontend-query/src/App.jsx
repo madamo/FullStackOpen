@@ -10,7 +10,8 @@ import UserContext from './UserContext'
 import { 
   Routes,
   Route,
-  Link
+  Link,
+  useParams
  } from 'react-router-dom'
 
 
@@ -128,6 +129,7 @@ const App = () => {
       const containerStyle = {
         width: '250px'
       }
+      
 
     return (
       <div style={containerStyle}>
@@ -135,13 +137,23 @@ const App = () => {
         <div style={columnLabel}><b>blogs created</b></div>
         {userList.map(user => 
           <li key={user.id} style={liStyle}>
-            <div style={divStyle}>{user.name}</div>
+            <Link to={`/users/${user.id}`} style={divStyle}>{user.name}</Link>
             <div style={divStyle}>{user.blogs.length}</div>
           </li>
         )}
       </div>
     )
   }
+
+  const User = () => {
+    const id = useParams().id
+    return (
+      <div>
+        showing results for user {id}
+      </div>
+    )
+  }
+
 
   if (user === null) {
     return (
@@ -169,6 +181,7 @@ const App = () => {
           <Notification notification={notification} />
           <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
           <Routes>
+            <Route path="/users/:id" element={<User />} />
             <Route path="/users" element={ <Users /> } />
             <Route path="/" element={ <BlogList loggedInUser={user.username} /> } />
           </Routes>
