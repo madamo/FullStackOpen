@@ -151,7 +151,7 @@ const App = () => {
     const id = useParams().id
     return (
       <div>
-        showing results for user {id}
+        showing blogs for user {id}
       </div>
     )
   }
