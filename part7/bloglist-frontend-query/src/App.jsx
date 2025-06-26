@@ -111,6 +111,8 @@ const App = () => {
       })
     const userList = users.data
 
+    console.log(userList)
+
       const liStyle = {
         listStyle: 'none',
         display: 'flex',
