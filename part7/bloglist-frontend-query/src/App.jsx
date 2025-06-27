@@ -147,11 +147,13 @@ const App = () => {
     )
   }
 
-  const User = () => {
+  const User = ({ user }) => {
     const id = useParams().id
+    console.log(user)
     return (
       <div>
         showing blogs for user {id}
+
       </div>
     )
   }
@@ -183,7 +185,7 @@ const App = () => {
           <Notification notification={notification} />
           <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
           <Routes>
-            <Route path="/users/:id" element={<User />} />
+            <Route path="/users/:id" element={<User user={user} />} />
             <Route path="/users" element={ <Users /> } />
             <Route path="/" element={ <BlogList loggedInUser={user.username} /> } />
           </Routes>
