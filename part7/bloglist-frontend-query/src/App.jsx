@@ -1,8 +1,10 @@
 import { useState, useEffect, useReducer } from 'react'
-import { useQuery, useQueryClient } from '@tanstack/react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import BlogList from './components/BlogList'
 import Login from './components/Login'
 import Notification from './components/Notification'
+import Users from './components/Users'
+import User from './components/User'
 import NotificationContext from './NotificationContext'
 import loginService from './services/login'
 import { setToken, getUsers } from './requests'
@@ -10,8 +12,6 @@ import UserContext from './UserContext'
 import { 
   Routes,
   Route,
-  Link,
-  useParams
  } from 'react-router-dom'
 
 
@@ -98,66 +98,6 @@ const App = () => {
     window.localStorage.removeItem('loggedBlogappUser')
     userDispatch({ type: 'LOGOUT' })
   }
-
-  const Users = () => {
-
-    const queryClient = useQueryClient()
-
-    const users = useQuery({
-        queryKey: ['users'],
-        placeholderData: [],
-        queryFn: getUsers,
-        retry: false
-      })
-    const userList = users.data
-
-    console.log(userList)
-
-      const liStyle = {
-        listStyle: 'none',
-        display: 'flex',
-        width: '100%',
-        justifyContent: 'space-between'
-      }
-
-      const divStyle = {
-      }
-
-      const columnLabel = {
-        width: '100%',
-        textAlign: 'right'
-      }
-
-      const containerStyle = {
-        width: '250px'
-      }
-      
-
-    return (
-      <div style={containerStyle}>
-        <h2>Users</h2>
-        <div style={columnLabel}><b>blogs created</b></div>
-        {userList.map(user => 
-          <li key={user.id} style={liStyle}>
-            <Link to={`/users/${user.id}`} style={divStyle}>{user.name}</Link>
-            <div style={divStyle}>{user.blogs.length}</div>
-          </li>
-        )}
-      </div>
-    )
-  }
-
-  const User = ({ user }) => {
-    const id = useParams().id
-    console.log(user)
-    return (
-      <div>
-        showing blogs for user {id}
-
-      </div>
-    )
-  }
-
 
   if (user === null) {
     return (
