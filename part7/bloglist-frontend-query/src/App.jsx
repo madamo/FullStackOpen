@@ -1,6 +1,7 @@
 import { useState, useEffect, useReducer } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import BlogList from './components/BlogList'
+import Blog from './components/Blog'
 import Login from './components/Login'
 import Notification from './components/Notification'
 import Users from './components/Users'
@@ -128,6 +129,7 @@ const App = () => {
             <Route path="/users/:id" element={<User user={user} />} />
             <Route path="/users" element={ <Users /> } />
             <Route path="/" element={ <BlogList loggedInUser={user.username} /> } />
+            <Route path="/blogs/:id" element={<Blog />} />
           </Routes>
         </div>
       </UserContext.Provider>

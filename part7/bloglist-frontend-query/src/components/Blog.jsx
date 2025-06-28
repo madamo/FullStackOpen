@@ -3,6 +3,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { updateBlog, removeBlog } from '../requests'
 import NotificationContext from '../NotificationContext'
 import UserContext from '../UserContext'
+import { useParams } from 'react-router-dom'
+import { getBlogs } from '../requests'
+
 
 const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
@@ -71,20 +74,36 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
       removeBlogMutation.mutate(blog.id)
     }
   }
+
+  const id = useParams().id
+
+  const result = useQuery({
+      queryKey: ['blogs'],
+      placeholderData: [],
+      queryFn: getBlogs,
+      retry: false
+    })
+    //console.log(JSON.parse(JSON.stringify(result)))
+    const blogs = result.data
+
+    const blogById = blogs.find(blog => blog.id === id)
+    console.log(blogById)
+
+    if (!blogById) {
+      return null
+    }
+
   
   return (
     <div style={blogStyle} className="blog">
-      {blog.title} {blog.author}
-      <button onClick={handleClick}>{visible ? 'hide' : 'show'}</button>
-        <div style={showElement} className="blog-details">
-          <div><a href={`${blog.url}`}>{blog.url}</a></div>
-          <div>likes {blog.likes}
+      <h2>{blogById.title} {blogById.author}</h2>
+          <div><a href={`${blogById.url}`}>{blogById.url}</a></div>
+          <div>likes {blogById.likes}
             <button onClick={addLike}>like</button>
           </div>
-          <div>{blog.user.name}</div>
-        </div>
+          <div>Added by {blogById.user.name}</div>
 
-        {user.username === blog.user.username && <button onClick={handleRemoveBlog}>remove</button> }
+        {user.username === blogById.user.username && <button onClick={handleRemoveBlog}>remove</button> }
         
     </div>
   )
