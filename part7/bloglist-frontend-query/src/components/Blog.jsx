@@ -104,7 +104,13 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
           <div>Added by {blogById.user.name}</div>
 
         {user.username === blogById.user.username && <button onClick={handleRemoveBlog}>remove</button> }
-        
+      <h3>comments</h3>
+      {blogById.comments 
+        ? blogById.comments.map(comment => 
+          <li key={comment}>{comment}</li>
+          ) 
+        : <p>no comments</p>
+      }
     </div>
   )
 }
