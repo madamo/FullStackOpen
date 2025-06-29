@@ -95,7 +95,7 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
   
   return (
-    <div style={blogStyle} className="blog">
+    <div className="blog">
       <h2>{blogById.title} {blogById.author}</h2>
           <div><a href={`${blogById.url}`}>{blogById.url}</a></div>
           <div>likes {blogById.likes}

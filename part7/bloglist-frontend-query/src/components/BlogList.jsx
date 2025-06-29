@@ -42,6 +42,8 @@ const BlogList = ({ loggedInUser }) => {
 
   return (
       <div>
+        <h2>Blogs</h2>
+
         <Togglable buttonLabel="Add Blog" ref={createBlogRef}>
           <CreateBlog toggleCreate={createBlogRef} />
         </Togglable>

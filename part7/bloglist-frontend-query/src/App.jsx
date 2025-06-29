@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import BlogList from './components/BlogList'
 import Blog from './components/Blog'
 import Login from './components/Login'
+import Navigation from './components/Navigation'
 import Notification from './components/Notification'
 import Users from './components/Users'
 import User from './components/User'
@@ -95,10 +96,7 @@ const App = () => {
     }
   }
 
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedBlogappUser')
-    userDispatch({ type: 'LOGOUT' })
-  }
+  
 
   if (user === null) {
     return (
@@ -122,9 +120,8 @@ const App = () => {
     <NotificationContext.Provider value={[notification, notificationDispatch]}>
       <UserContext.Provider value={user}>
         <div>
-          <h2>Blogs</h2>
+          <Navigation />
           <Notification notification={notification} />
-          <p>{user.name} is logged in <button onClick={handleLogout}>logout</button></p>
           <Routes>
             <Route path="/users/:id" element={<User user={user} />} />
             <Route path="/users" element={ <Users /> } />
