@@ -8,9 +8,46 @@ import { getBlogs, addComment } from '../requests'
 import styled from 'styled-components'
 
 const Entry = styled.div`
-    border: 1px solid green;
+    border: 2px solid #FF13F0;
     margin: 5px 0;
+    padding: 0px 5px;
     width: 100%;
+
+    li {
+      list-style: none;
+      background-color: lightgrey;
+      margin: 5px 0;
+      padding: 5px 2px;
+      width: 50%;
+      border-radius: 5px;
+    }
+`
+
+const BlogUrl = styled.div`
+  margin: 5px 0;
+`
+
+const BlogLikes = styled.div`
+  margin: 5px 0;
+
+  button {
+    margin-left: 15px;
+  }
+`
+
+const BlogAuthor = styled.div`
+  margin: 5px 0;
+`
+
+const AddCommentField = styled.div`
+  width: 50%;
+  display: flex;
+  justify-content: space-between;
+
+  input {
+    width: 75%;
+    padding: 5px 0;
+  }
 `
 
 
@@ -69,16 +106,7 @@ const Blog = ({ blog }) => {
 
   const addLike = (event) => {
     event.preventDefault()
-    /*const blogObject = {
-      user: blog.user.id,
-      author: blog.author,
-      title: blog.title,
-      url: blog.url,
-      likes: blog.likes + 1
-    }*/
-    console.log(blog.likes + 1)
-    //handleLike(blog.id, blogObject)
-    updateLikesMutation.mutate({ ...blog, likes: blog.likes + 1})
+    updateLikesMutation.mutate({ ...blogById, likes: blogById.likes + 1})
   }
 
   const handleRemoveBlog = (event) => {
@@ -114,7 +142,7 @@ const Blog = ({ blog }) => {
     const blogs = result.data
 
     const blogById = blogs.find(blog => blog.id === id)
-
+    //console.log(blogById)
     if (!blogById) {
       return null
     }
@@ -123,18 +151,18 @@ const Blog = ({ blog }) => {
   return (
     <Entry>
       <h2>{blogById.title} {blogById.author}</h2>
-          <div><a href={`${blogById.url}`}>{blogById.url}</a></div>
-          <div>likes {blogById.likes}
+          <BlogUrl><a href={`${blogById.url}`}>{blogById.url}</a></BlogUrl>
+          <BlogLikes>{blogById.likes} likes
             <button onClick={addLike}>like</button>
-          </div>
-          <div>Added by {blogById.user.name}</div>
+          </BlogLikes>
+          <BlogAuthor>Added by {blogById.user.name}</BlogAuthor>
 
         {user.username === blogById.user.username && <button onClick={handleRemoveBlog}>remove</button> }
       <h3>comments</h3>
-      <div>
+      <AddCommentField>
         <input onChange={onChange} value={commentVal} />
         <button onClick={() => handleAddComment(blogById.id)}>add comment</button>
-      </div>
+      </AddCommentField>
 
       {blogById.comments 
         ? blogById.comments.map(comment => 

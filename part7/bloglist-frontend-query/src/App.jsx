@@ -10,7 +10,7 @@ import User from './components/User'
 import NotificationContext from './NotificationContext'
 import loginService from './services/login'
 import { setToken, getUsers } from './requests'
-import UserContext from './UserContext'
+import UserContextProvider from './UserContext'
 import { 
   Routes,
   Route,
@@ -52,6 +52,7 @@ const Page = styled.div`
     align-items: center;
     justify-content: center;
     font-family: Helvetica, sans-serif;
+    position: relative;
   `
 
 
@@ -127,7 +128,7 @@ const App = () => {
 
   return (
     <NotificationContext.Provider value={[notification, notificationDispatch]}>
-      <UserContext.Provider value={user}>
+      <UserContextProvider value={[user, userDispatch]}>
         <Page>
           <Navigation />
           <Notification notification={notification} />
@@ -138,7 +139,7 @@ const App = () => {
             <Route path="/blogs/:id" element={<Blog />} />
           </Routes>
         </Page>
-      </UserContext.Provider>
+      </UserContextProvider>
     </NotificationContext.Provider>
   )
 }

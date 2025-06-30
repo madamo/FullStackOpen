@@ -1,3 +1,11 @@
+import styled from 'styled-components'
+
+const Banner = styled.div`
+  width: 100%;
+  position: absolute;
+  top: 50px;
+`
+
 const Notification = ({ notification }) => {
   //const { message, isError } = notification
 
@@ -17,9 +25,9 @@ const Notification = ({ notification }) => {
   }
 
   return (
-      <div style={style}>
+      <Banner style={style}>
           {notification.message}
-      </div>
+      </Banner>
   )
 }
 

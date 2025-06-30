@@ -20,7 +20,7 @@ const CreateBlog = ({ toggleCreate }) => {
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['blogs' ]})
       // TO-DO: notfications
-      notificationDispatch({ type: 'SET_MESSAGE', payload: {message: `anecdote ${data.title} created`, isError: false}})
+      notificationDispatch({ type: 'SET_MESSAGE', payload: {message: `blog ${data.title} created`, isError: false}})
       setTimeout(() => {
         notificationDispatch({ type: 'CLEAR_MESSAGE'})
       }, 5000)

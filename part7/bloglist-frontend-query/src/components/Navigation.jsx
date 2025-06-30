@@ -28,7 +28,7 @@ const NavMenu = styled.div`
 
 const Navigation = () => {
 
-  const user = useContext(UserContext)
+  const [user, userDispatch] = useContext(UserContext)
 
   const handleLogout = () => {
     window.localStorage.removeItem('loggedBlogappUser')
