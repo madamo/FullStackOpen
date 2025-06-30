@@ -5,9 +5,16 @@ import NotificationContext from '../NotificationContext'
 import UserContext from '../UserContext'
 import { useParams } from 'react-router-dom'
 import { getBlogs, addComment } from '../requests'
+import styled from 'styled-components'
+
+const Entry = styled.div`
+    border: 1px solid green;
+    margin: 5px 0;
+    width: 100%;
+`
 
 
-const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
+const Blog = ({ blog }) => {
 
   const [visible, setVisible] = useState(false)
   const [commentVal, setCommentVal] = useState('')
@@ -54,14 +61,7 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
   })
 
   const showElement = { display: visible ? '' : 'none' }
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
-
+  
   const handleClick = () => {
     setVisible(!visible)
     //console.log(loggedInUser)
@@ -98,8 +98,6 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
     const commentObject = {
       "comment": commentVal
     }
-    console.log(commentObject)
-    //addComment(id, commentObject)
     addCommentMutation.mutate({id, commentObject})
     setCommentVal('')
   }
@@ -123,7 +121,7 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
   
   return (
-    <div className="blog">
+    <Entry>
       <h2>{blogById.title} {blogById.author}</h2>
           <div><a href={`${blogById.url}`}>{blogById.url}</a></div>
           <div>likes {blogById.likes}
@@ -144,7 +142,7 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
           ) 
         : <p>no comments</p>
       }
-    </div>
+    </Entry>
   )
 }
 

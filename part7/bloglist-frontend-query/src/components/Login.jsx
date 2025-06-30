@@ -1,8 +1,33 @@
+import styled from 'styled-components'
+
+const Form = styled.form`
+  display: flex;
+  flex-direction: column;
+
+  .inputGroup {
+    margin: 8px 0;
+
+    label {
+      display: block;
+    }
+
+    input {
+      width: 97%;
+      padding: 5px;
+    }
+  }
+    
+  button {
+    align-self: flex-end;
+    width: 100px;
+  }
+`
+
 const Login = ({ submitHandler, username, updateUsername, password, updatePassword }) => (
-  <form onSubmit={submitHandler}>
+  <Form onSubmit={submitHandler}>
     <h1>Log in to bloglist</h1>
-    <div>
-        username
+    <div className="inputGroup">
+        <label>username</label>
           <input 
             type="text"
             value={username}
@@ -11,8 +36,8 @@ const Login = ({ submitHandler, username, updateUsername, password, updatePasswo
             onChange={({ target }) => updateUsername(target.value)}
           />
       </div>
-      <div>
-        password
+      <div className="inputGroup">
+        <label>password</label>
           <input
             type="password"
             value={password}
@@ -22,7 +47,7 @@ const Login = ({ submitHandler, username, updateUsername, password, updatePasswo
           />
       </div>
       <button type="submit">login</button>
-  </form>
+  </Form>
 )
 
 export default Login

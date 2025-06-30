@@ -15,6 +15,7 @@ import {
   Routes,
   Route,
  } from 'react-router-dom'
+ import styled from 'styled-components'
 
 
 const notificationReducer = (state, action) => {
@@ -42,6 +43,16 @@ const userReducer = (state, action) => {
       return state
   }
 }
+
+const Page = styled.div`
+    width: 80%;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: Helvetica, sans-serif;
+  `
 
 
 const App = () => {
@@ -96,12 +107,10 @@ const App = () => {
     }
   }
 
-  
-
   if (user === null) {
     return (
       <NotificationContext.Provider value={[notification, notificationDispatch]}>
-        <div>
+        <Page>
           <Notification notification={notification} />
 
           <Login 
@@ -111,7 +120,7 @@ const App = () => {
             password={password}
             updatePassword={setPassword} 
           />
-        </div> 
+        </Page> 
       </NotificationContext.Provider>
     )
   }
@@ -119,7 +128,7 @@ const App = () => {
   return (
     <NotificationContext.Provider value={[notification, notificationDispatch]}>
       <UserContext.Provider value={user}>
-        <div>
+        <Page>
           <Navigation />
           <Notification notification={notification} />
           <Routes>
@@ -128,7 +137,7 @@ const App = () => {
             <Route path="/" element={ <BlogList loggedInUser={user.username} /> } />
             <Route path="/blogs/:id" element={<Blog />} />
           </Routes>
-        </div>
+        </Page>
       </UserContext.Provider>
     </NotificationContext.Provider>
   )
