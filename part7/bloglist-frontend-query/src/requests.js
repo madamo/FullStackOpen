@@ -66,12 +66,26 @@ export const removeBlog = async (id) => {
   return response.data
 }
 
+export const addComment = async (blogObject) => {
+  //console.log(`adding comment ${blogObject.commentObject}`)
+  //console.log(blogObject.id)
+  const config = {
+    headers: { 
+      'Content-Type': 'application/json',
+      'Authorization': token 
+    }
+  }
+
+  const response = await axios.post(`${baseUrl}/${blogObject.id}/comments`, blogObject.commentObject, config)
+  return response.data
+}
+
 export const getUsers = async () => {
   console.log('getting users...')
   const config = {
     headers: { Authorization: token }
   }
   console.log(`getting blogs with token ${token}...`)
-  const result = await axios.get('/api/users', config)
-  return result.data
+  const response = await axios.get('/api/users', config)
+  return response.data
 }

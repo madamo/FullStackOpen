@@ -4,13 +4,16 @@ import { updateBlog, removeBlog } from '../requests'
 import NotificationContext from '../NotificationContext'
 import UserContext from '../UserContext'
 import { useParams } from 'react-router-dom'
-import { getBlogs } from '../requests'
+import { getBlogs, addComment } from '../requests'
 
 
 const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
   const [visible, setVisible] = useState(false)
+  const [commentVal, setCommentVal] = useState('')
+
   const queryClient = useQueryClient()
+
   const [notification, notificationDispatch] = useContext(NotificationContext)
   const user = useContext(UserContext)
 
@@ -33,6 +36,17 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['blogs'] })
       notificationDispatch({ type: 'SET_MESSAGE', payload: { message: `blog removed!`, isError: false }})
+      setTimeout(() => {
+        notificationDispatch({ type: 'CLEAR_MESSAGE' })
+      }, 5000)
+    }
+  })
+
+  const addCommentMutation = useMutation({
+    mutationFn: addComment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['blogs'] })
+      notificationDispatch({ type: 'SET_MESSAGE', payload: { message: 'comment added!', isError: false }})
       setTimeout(() => {
         notificationDispatch({ type: 'CLEAR_MESSAGE' })
       }, 5000)
@@ -75,6 +89,21 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
     }
   }
 
+  const onChange = (event) => {
+    setCommentVal(event.target.value)
+  }
+
+  const handleAddComment = (id) => {
+    console.log(commentVal)
+    const commentObject = {
+      "comment": commentVal
+    }
+    console.log(commentObject)
+    //addComment(id, commentObject)
+    addCommentMutation.mutate({id, commentObject})
+    setCommentVal('')
+  }
+
   const id = useParams().id
 
   const result = useQuery({
@@ -87,7 +116,6 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
     const blogs = result.data
 
     const blogById = blogs.find(blog => blog.id === id)
-    console.log(blogById)
 
     if (!blogById) {
       return null
@@ -105,6 +133,11 @@ const Blog = ({ blog, handleLike, handleRemove, loggedInUser }) => {
 
         {user.username === blogById.user.username && <button onClick={handleRemoveBlog}>remove</button> }
       <h3>comments</h3>
+      <div>
+        <input onChange={onChange} value={commentVal} />
+        <button onClick={() => handleAddComment(blogById.id)}>add comment</button>
+      </div>
+
       {blogById.comments 
         ? blogById.comments.map(comment => 
           <li key={comment}>{comment}</li>
