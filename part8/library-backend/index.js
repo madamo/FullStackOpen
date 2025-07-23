@@ -139,7 +139,7 @@ const resolvers = {
     authorCount: () => authors.length,
     allBooks: (root, args) => {
       if (!args.author && !args.genre) {
-        console.log('no args')
+        console.log('allBooks: no args, returning all books')
         return books
       }
 
@@ -155,6 +155,12 @@ const resolvers = {
     addBook: (root, args) => {
       const book = { ...args, id: uuid() }
       books = books.concat(book)
+      console.log('author name', args.author)
+      //const author = authors.find(a => a.name === args.author)
+      if (!authors.find(a => a.name === args.author)) {
+        console.log(`${args.author} not in database`)
+        authors = authors.concat({name: args.author, born: null})
+      }
       return book
     },
     editAuthor: (root, args) => {
