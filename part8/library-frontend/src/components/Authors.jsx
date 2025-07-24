@@ -1,9 +1,11 @@
 import { useQuery } from '@apollo/client'
 import { ALL_AUTHORS } from '../queries'
+import BirthYearForm from './BirthYearForm'
 
 const Authors = () => {
 
   const result = useQuery(ALL_AUTHORS)
+
 
   if (result.loading) {
     return <div>LOADING...</div>
@@ -28,6 +30,8 @@ const Authors = () => {
           ))}
         </tbody>
       </table>
+
+      <BirthYearForm />
     </div>
   )
 }

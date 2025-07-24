@@ -166,6 +166,7 @@ const resolvers = {
     editAuthor: (root, args) => {
       const author = authors.find(a => a.name === args.name)
       if (!author) {
+        console.log('author not found')
         return null
       }
 
