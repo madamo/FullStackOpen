@@ -5,10 +5,14 @@ import BirthYearForm from './BirthYearForm'
 const Authors = () => {
 
   const result = useQuery(ALL_AUTHORS)
-
+  const authors = []
 
   if (result.loading) {
     return <div>LOADING...</div>
+  }
+
+  if (!result.loading) {
+    result.data.allAuthors.forEach(author => authors.push(author.name))
   }
 
   return (
@@ -31,7 +35,7 @@ const Authors = () => {
         </tbody>
       </table>
 
-      <BirthYearForm />
+      <BirthYearForm authors={authors} />
     </div>
   )
 }
