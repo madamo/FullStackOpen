@@ -153,24 +153,30 @@ const typeDefs = `
 
 const resolvers = {
   Author: {
-    bookCount: (root) => books.filter(b => b.author === root.name).length
+    bookCount: async (root) => {
+      // TO-DO: not for 8_13
+      console.log('counting books for', root.name)
+      //books.filter(b => b.author === root.name).length
+      //return Book.find( {} ).populate({ path: 'author', match: { name: { $eq: root.name  } } }).countDocuments()
+    }
   },
   Query: {
-    bookCount: () => books.length,
-    authorCount: () => authors.length,
-    allBooks: (root, args) => {
+    bookCount: async () => Book.collection.countDocuments(),
+    authorCount: async () => Author.collection.countDocuments(),
+    allBooks: async (root, args) => {
+      // TO-DO: search with args not for 8_13
       if (!args.author && !args.genre) {
         console.log('allBooks: no args, returning all books')
-        return 
+        return Book.find( {} ).populate('author', { name: 1 })
       }
-
+      /*
       return books.filter(b => 
         args.genre ? b.genres.includes(args.genre) : b
       ).filter(b => 
         args.author ? b.author === args.author : b
-      )
+      )*/
     },
-    allAuthors: () => authors
+    allAuthors: async () => Author.find( {} )
   },
   Mutation: {
     addBook: (root, args) => {
@@ -185,6 +191,7 @@ const resolvers = {
       return book
     },
     editAuthor: (root, args) => {
+      //TO-DO: not for 8_13
       const author = authors.find(a => a.name === args.name)
       if (!author) {
         console.log('author not found')
