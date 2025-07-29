@@ -179,14 +179,28 @@ const resolvers = {
     allAuthors: async () => Author.find( {} )
   },
   Mutation: {
-    addBook: (root, args) => {
-      const book = { ...args, id: uuid() }
-      books = books.concat(book)
-      console.log('author name', args.author)
-      //const author = authors.find(a => a.name === args.author)
-      if (!authors.find(a => a.name === args.author)) {
-        console.log(`${args.author} not in database`)
-        authors = authors.concat({name: args.author, born: null})
+    addBook: async (root, args) => {
+      let author = await Author.findOne({ name: args.author })
+      console.log(author)
+
+      if (!author) {
+        console.log('author not found:', args.author)
+        const newAuthor = new Author({ name: args.author })
+        try {
+          await newAuthor.save()
+          author = newAuthor
+        } catch (error) {
+          console.log('error saving new author:', error)
+        }
+      }
+      
+      const book = new Book({ ...args })
+      book.author = author
+
+      try {
+        await book.save()
+      } catch (error) {
+        console.log('Saving book failed', error)
       }
       return book
     },
