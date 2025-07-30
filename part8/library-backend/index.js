@@ -154,10 +154,9 @@ const typeDefs = `
 const resolvers = {
   Author: {
     bookCount: async (root) => {
-      // TO-DO: not for 8_13
-      console.log('counting books for', root.name)
-      //books.filter(b => b.author === root.name).length
-      //return Book.find( {} ).populate({ path: 'author', match: { name: { $eq: root.name  } } }).countDocuments()
+      // TO-DO: Find better way to do this
+      const booksByAuthor = await Book.find( {} ).populate('author', { name: 1 })
+      return booksByAuthor.filter(book => book.author.name === root.name).length
     }
   },
   Query: {
