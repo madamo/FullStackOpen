@@ -168,12 +168,15 @@ const resolvers = {
         console.log('allBooks: no args, returning all books')
         return Book.find( {} ).populate('author', { name: 1 })
       }
-      /*
-      return books.filter(b => 
-        args.genre ? b.genres.includes(args.genre) : b
-      ).filter(b => 
-        args.author ? b.author === args.author : b
-      )*/
+
+      //TO-DO: find better way to do this
+      const books = args.genre ? await Book.find({ genres: args.genre }).populate('author', { name: 1 }) : await Book.find( {} ).populate('author', { name: 1 })
+
+      if (args.author) {
+        return books.filter(b => b.author.name === args.author)
+      } else {
+        return books
+      }
     },
     allAuthors: async () => Author.find( {} )
   },
