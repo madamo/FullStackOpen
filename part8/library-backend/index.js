@@ -154,9 +154,10 @@ const typeDefs = `
 const resolvers = {
   Author: {
     bookCount: async (root) => {
-      // TO-DO: Find better way to do this
-      const booksByAuthor = await Book.find( {} ).populate('author', { name: 1 })
-      return booksByAuthor.filter(book => book.author.name === root.name).length
+      // TO-DO: Find better way to do this - maybe get author id then find all books where author matches id
+      const author = await Author.findOne({ name: root.name })
+      console.log(author)
+      return Book.find({ author: { _id: author._id} } ).countDocuments()
     }
   },
   Query: {
@@ -206,17 +207,22 @@ const resolvers = {
       }
       return book
     },
-    editAuthor: (root, args) => {
+    editAuthor: async (root, args) => {
       //TO-DO: not for 8_13
-      const author = authors.find(a => a.name === args.name)
+      const author = await Author.findOne({ name: args.name })
       if (!author) {
         console.log('author not found')
         return null
       }
 
-      const updatedAuthor = { ...author, born: args.setBornTo }
-      authors = authors.map(a => a.name === args.name ? updatedAuthor : a)
-      return updatedAuthor
+      author.born = args.setBornTo
+      try {
+        await author.save()
+      } catch (error) {
+        console.log('Error saving author: ', error)
+      }
+      
+      return author
     }
   }
 }
