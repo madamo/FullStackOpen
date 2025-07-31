@@ -1,7 +1,7 @@
 const { ApolloServer } = require('@apollo/server')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { v1: uuid } = require('uuid')
-
+const { GraphQLError } = require('graphql')
 
 const mongoose = require('mongoose')
 mongoose.set('strictQuery', false)
@@ -164,7 +164,7 @@ const resolvers = {
     bookCount: async () => Book.collection.countDocuments(),
     authorCount: async () => Author.collection.countDocuments(),
     allBooks: async (root, args) => {
-      // TO-DO: search with args not for 8_13
+      // If no arguments, return all books
       if (!args.author && !args.genre) {
         console.log('allBooks: no args, returning all books')
         return Book.find( {} ).populate('author', { name: 1 })
@@ -194,6 +194,12 @@ const resolvers = {
           author = newAuthor
         } catch (error) {
           console.log('error saving new author:', error)
+          throw new GraphQLError('Adding new author failed', {
+            extensions: {
+              code: 'BAD_USER_INPUT',
+              invalidArgs: args.author, error
+            }
+          })
         }
       }
       
@@ -204,6 +210,12 @@ const resolvers = {
         await book.save()
       } catch (error) {
         console.log('Saving book failed', error)
+        throw new GraphQLError('Saving book failed', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.title, error
+          }
+        })
       }
       return book
     },
@@ -220,6 +232,12 @@ const resolvers = {
         await author.save()
       } catch (error) {
         console.log('Error saving author: ', error)
+        throw new GraphQLError('Error updating birth year', {
+          extensions: {
+            code: 'BAD_USER_INPUT',
+            invalidArgs: args.setBornTo, error
+          }
+        })
       }
       
       return author
