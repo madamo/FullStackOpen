@@ -35,7 +35,7 @@ const BirthYearForm = ({ authors }) => {
       <form onSubmit={submit}>
         <select onChange={( { target }) => setName(target.value)}>
           {authors.map(a => 
-            <option>{a}</option>
+            <option key={a}>{a}</option>
           )}
         </select>
         <div>
