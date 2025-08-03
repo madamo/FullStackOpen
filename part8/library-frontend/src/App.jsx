@@ -13,7 +13,7 @@ import NewBook from './components/NewBook'
 const App = () => {
 
   const [token, setToken] = useState(null)
-  const [errorMessage, setErrorMessage] = useState(null)
+  //const [errorMessage, setErrorMessage] = useState(null)
 
   const linkStyle = {
     padding: 5,
@@ -26,8 +26,13 @@ const App = () => {
       <div>
         <Link to="/" style={linkStyle}>authors</Link>
         <Link to="/books" style={linkStyle}>books</Link>
-        <Link to="/add-book" style={linkStyle}>add book</Link>
-        <Link to="/login" style={linkStyle}>login</Link>
+        { token && 
+          <span>
+            <Link to="/add-book" style={linkStyle}>add book</Link>
+            <Link to="/logout" style={linkStyle}>logout</Link>
+          </span>
+        }
+        { !token && <Link to="/login" style={linkStyle}>login</Link>}
       </div>
 
       <Routes>

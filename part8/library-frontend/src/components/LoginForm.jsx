@@ -8,7 +8,7 @@ const LoginForm = ({ setToken }) => {
 
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
-      setError(error.graphQLErrors[0].message)
+      console.log(error.graphQLErrors[0].message)
     }
   })
 
@@ -16,7 +16,7 @@ const LoginForm = ({ setToken }) => {
     if (result.data) {
       const token = result.data.login.value
       setToken(token)
-      //localStorage.setItem('')
+      localStorage.setItem('library-user-token', token)
     }
   }, [result.data])
 
@@ -32,7 +32,7 @@ const LoginForm = ({ setToken }) => {
           username <input value={username} onChange={( { target } ) => setUsername(target.value)} />
         </div>
         <div>
-          password <input value={username} onChange={( { target } ) => setPassword(target.value)} />
+          password <input value={password} onChange={( { target } ) => setPassword(target.value)} />
         </div>
         <button type="submit">login</button>
       </form>
