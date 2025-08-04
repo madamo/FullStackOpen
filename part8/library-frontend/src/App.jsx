@@ -15,6 +15,13 @@ const App = () => {
   const [token, setToken] = useState(null)
   //const [errorMessage, setErrorMessage] = useState(null)
 
+  const notify = (message) => {
+    setErrorMessage(message)
+    setTimeout(() => {
+      setErrorMessage(null)
+    }, 5000)
+  }
+  
   const linkStyle = {
     padding: 5,
     margin: '0 5px',
