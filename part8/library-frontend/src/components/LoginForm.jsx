@@ -1,14 +1,20 @@
 import { useState, useEffect }  from 'react'
 import { useMutation } from '@apollo/client'
 import { LOGIN } from '../queries'
+import { useNavigate } from 'react-router-dom'
 
 const LoginForm = ({ setToken }) => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
+  const navigate = useNavigate()
+
   const [ login, result ] = useMutation(LOGIN, {
     onError: (error) => {
       console.log(error.graphQLErrors[0].message)
+    },
+    onCompleted: () => {
+      navigate("/")
     }
   })
 
@@ -23,6 +29,7 @@ const LoginForm = ({ setToken }) => {
   const submit = async (event) => {
     event.preventDefault()
     login({ variables: { username, password } })
+    //navigate("/")
   }
 
   return (
