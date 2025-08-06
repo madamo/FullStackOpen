@@ -2,7 +2,6 @@ import { BrowserRouter as Router,
   Routes,
   Route,
   Link,
-  useNavigate
 } from 'react-router-dom'
 import { useState } from 'react'
 
@@ -11,6 +10,7 @@ import Books from './components/Books'
 import LoginForm from './components/LoginForm'
 import NewBook from './components/NewBook'
 import Notification from './components/Notififcation'
+import Recommendations from './components/Recommendations'
 
 const App = () => {
 
@@ -52,6 +52,8 @@ const App = () => {
           ? 
             <span>
               <Link to="/add-book" style={linkStyle}>add book</Link>
+              <Link to="/recommend" style={linkStyle}>recomend</Link>
+
               <Link style={linkStyle} onClick={logout}>logout</Link>
             </span>
           :
@@ -65,6 +67,8 @@ const App = () => {
         <Route path="/books" element={<Books />} />
         <Route path="/add-book" element={<NewBook setError={notify} />} />
         <Route path="/login" element={<LoginForm setToken={setToken} /> }/>
+        <Route path="/recommend" element={<Recommendations /> }/>
+
       </Routes>
   
     </Router>
