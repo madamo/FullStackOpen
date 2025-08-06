@@ -6,7 +6,8 @@ const Books = () => {
   
   const result = useQuery(ALL_BOOKS)
   const genres = []
-  const [booksToShow, setBooksToShow] = useState([])
+  const [booksToShow, setBooksToShow] = useState(result.data.allBooks)
+  const [filter, setFilter] = useState('all')
 
   if (result.loading) {
     return <div>LOADING...</div>
@@ -24,6 +25,7 @@ const Books = () => {
 
   const filterBooks = (genre) => {
     console.log('filtering by', genre)
+    setFilter(genre)
     if (genre === 'all') {
       setBooksToShow(result.data.allBooks)
     } else {
@@ -44,6 +46,7 @@ const Books = () => {
   return (
     <div>
       <h2>books</h2>
+        <div>showing books in genre: {filter}</div>
 
       <table>
         <tbody>
@@ -57,7 +60,6 @@ const Books = () => {
               <td>{a.title}</td>
               <td>{a.author.name}</td>
               <td>{a.published}</td>
-              <td>{a.genres.map(genre => <span key={genre}>{genre} </span>)}</td>
             </tr>
           ))}
         </tbody>
