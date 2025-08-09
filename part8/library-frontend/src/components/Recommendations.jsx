@@ -1,8 +1,13 @@
 import { ME } from '../queries'
+import { useQuery } from '@apollo/client'
 
 const Recommendations = () => {
+
+  const user = useQuery(ME)
+  console.log(user)
+  
   return (
-    <div>here's some books</div>
+    <div>showing books with genre {user.data.me.favoriteGenre}</div>
   )
 }
 
