@@ -1,17 +1,15 @@
 import { useState } from 'react'
 import { useQuery } from "@apollo/client"
-import { ALL_BOOKS, ME } from "../queries"
+import { ALL_BOOKS } from "../queries"
 
 const Books = () => {
   
   const result = useQuery(ALL_BOOKS)
-  const user = useQuery(ME)
-
-  console.log(user)
 
   const genres = []
   const [booksToShow, setBooksToShow] = useState([])
   const [filter, setFilter] = useState('all')
+
 
   if (result.loading) {
     return <div>LOADING...</div>
@@ -43,6 +41,7 @@ const Books = () => {
   }
 
   getGenres(result.data.allBooks)
+
 
   return (
     <div>

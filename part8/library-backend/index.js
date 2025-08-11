@@ -203,7 +203,8 @@ const resolvers = {
     },
     recommendedBooks: async (root, args, context) => {
       console.log("getting books with genre:", context.currentUser.favoriteGenre)
-      return Book.find({ genres: context.currentUser.favoriteGenre }).populate('author', { name: 1 })
+      const books = await Book.find({ genres: context.currentUser.favoriteGenre }).populate('author', { name: 1 })
+      return books
     },
     allAuthors: async () => Author.find( {} ),
     me: (root, args, context) => {
