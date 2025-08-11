@@ -3,7 +3,7 @@ import { BrowserRouter as Router,
   Route,
   Link,
 } from 'react-router-dom'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Authors from './components/Authors'
 import Books from './components/Books'
@@ -33,6 +33,14 @@ const App = () => {
     //navigate("/login")
   }
 
+  useEffect(() => {
+    const loggedInUser = localStorage.getItem('library-user-token')
+
+    if (loggedInUser) {
+      setToken(loggedInUser)
+    }
+  }, [])
+
   const linkStyle = {
     padding: 5,
     margin: '0 5px',
@@ -52,7 +60,7 @@ const App = () => {
           ? 
             <span>
               <Link to="/add-book" style={linkStyle}>add book</Link>
-              <Link to="/recommend" style={linkStyle}>recomend</Link>
+              <Link to="/recommend" style={linkStyle}>recommend</Link>
 
               <Link style={linkStyle} onClick={logout}>logout</Link>
             </span>
@@ -68,7 +76,6 @@ const App = () => {
         <Route path="/add-book" element={<NewBook setError={notify} />} />
         <Route path="/login" element={<LoginForm setToken={setToken} /> }/>
         <Route path="/recommend" element={<Recommendations /> }/>
-
       </Routes>
   
     </Router>
