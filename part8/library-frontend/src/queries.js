@@ -65,3 +65,6 @@ export const ME = gql`
     }
   }
 `
+
+export const BOOKS_BY_GENRE = gql`
+`
