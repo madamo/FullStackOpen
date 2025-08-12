@@ -18,7 +18,7 @@ const NewBook = ({ setError }) => {
     },
     onCompleted: () => {
       setError('Book added')
-    }
+    },
   })
 
   const submit = async (event) => {

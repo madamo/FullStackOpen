@@ -16,13 +16,10 @@ const Books = () => {
     return <div>LOADING...</div>
   }
 
-  console.log(result)
-
   const getGenres = (books) => {
     // Create list of genres, then update state
     const libraryGenres = []
     books.map(book => {
-      console.log(book)
       book.genres.forEach(genre => {
         if (!libraryGenres.includes(genre)) {
           libraryGenres.push(genre)
