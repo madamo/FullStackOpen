@@ -78,3 +78,5 @@ export const RECOMMENDED_BOOKS = gql`
     }
   }
 `
+
+// TO-DO: Add Subscription schema
