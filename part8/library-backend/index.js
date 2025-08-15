@@ -1,6 +1,6 @@
 const { ApolloServer } = require('@apollo/server')
 const { ApolloServerPluginDrainHttpServer } = require('@apollo/server/plugin/drainHttpServer')
-const { expressMiddleware } = require('@as-integration/express5')
+const { expressMiddleware } = require('@as-integrations/express5')
 const { startStandaloneServer } = require('@apollo/server/standalone')
 const { makeExecutableSchema } = require('@graphql-tools/schema')
 
@@ -8,6 +8,11 @@ const { WebSocketServer } = require('ws')
 const { useServer } = require('graphql-ws/use/ws')
 
 //const { v1: uuid } = require('uuid')
+
+const http = require('http')
+const express = require('express')
+const bodyParser = require('body-parser')
+const cors = require('cors')
 
 const jwt = require('jsonwebtoken')
 const User = require('./models/user')
