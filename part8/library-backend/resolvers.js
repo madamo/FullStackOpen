@@ -40,7 +40,7 @@ const resolvers = {
       const books = await Book.find({ genres: context.currentUser.favoriteGenre }).populate('author', { name: 1 })
       return books
     },
-    allAuthors: async () => Author.find( {} ),
+    allAuthors: async () => await Author.find( {} ),
     me: (root, args, context) => {
       return context.currentUser
     }
@@ -89,6 +89,8 @@ const resolvers = {
           }
         })
       }
+
+      pubsub.publish('BOOK_ADDED', { bookAdded: book })
       return book
     },
     editAuthor: async (root, args, context) => {
@@ -154,5 +156,15 @@ const resolvers = {
 
       return { value: jwt.sign(userForToken, process.env.JWT_SECRET)}
     }
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => {
+        console.log('subscribe')
+        return pubsub.asyncIterableIterator('BOOK_ADDED')
+      }
+    }
   }
 }
+
+module.exports = resolvers

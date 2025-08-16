@@ -12,6 +12,7 @@ const Authors = () => {
   }
 
   if (!result.loading) {
+    console.log(result)
     result.data.allAuthors.forEach(author => authors.push(author.name))
   }
 

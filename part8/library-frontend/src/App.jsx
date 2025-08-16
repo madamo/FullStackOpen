@@ -12,6 +12,9 @@ import NewBook from './components/NewBook'
 import Notification from './components/Notififcation'
 import Recommendations from './components/Recommendations'
 
+import { BOOK_ADDED } from './queries'
+import { useSubscription } from '@apollo/client'
+
 const App = () => {
 
   const [token, setToken] = useState(null)
@@ -32,6 +35,12 @@ const App = () => {
     localStorage.removeItem('library-user-token', token)
     //navigate("/login")
   }
+
+  useSubscription(BOOK_ADDED, {
+    onData: ({ data }) => {
+      console.log(data)
+    }
+  })
 
   useEffect(() => {
     const loggedInUser = localStorage.getItem('library-user-token')

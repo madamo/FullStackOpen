@@ -79,4 +79,14 @@ export const RECOMMENDED_BOOKS = gql`
   }
 `
 
-// TO-DO: Add Subscription schema
+// TO-DO: Create book fragment
+export const BOOK_ADDED = gql`
+  subscription {
+    bookAdded {
+      title
+      author {
+        name
+      }
+    }
+  }
+`
