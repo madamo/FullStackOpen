@@ -19,7 +19,9 @@ const NewBook = ({ setError }) => {
     onCompleted: () => {
       setError('Book added')
     },
-    //TO-DO: Update cache
+    update: (cache, response) => {
+      //TO-DO: Update cache
+    }
   })
 
   const submit = async (event) => {
