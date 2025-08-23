@@ -12,8 +12,26 @@ import NewBook from './components/NewBook'
 import Notification from './components/Notififcation'
 import Recommendations from './components/Recommendations'
 
-import { BOOK_ADDED } from './queries'
+import { ALL_BOOKS, BOOK_ADDED } from './queries'
 import { useSubscription } from '@apollo/client'
+
+export const updateCache = (cache, query, addedBook) => {
+    const uniqByTitle = (b) => {
+      let seen = new Set()
+      return b.filter((item) => {
+        let k = item.title
+        return seen.has(k) ? false : seen.add(k)
+      })
+    }
+
+    cache.updateQuery(query, (data) => {
+      console.log(data)
+      console.log('query', query)
+      return {
+        allBooks: uniqByTitle(data.allBooks.concat(addedBook))
+      }
+    })
+  }
 
 const App = () => {
 
@@ -37,9 +55,10 @@ const App = () => {
   }
 
   useSubscription(BOOK_ADDED, {
-    onData: ({ data }) => {
+    onData: ({ data, client }) => {
       console.log(data)
       window.alert(`${data.data.bookAdded.title} added!`)
+      updateCache(client.cache, { query: ALL_BOOKS }, data.data.bookAdded )
     }
   })
 

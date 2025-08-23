@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useMutation } from '@apollo/client'
 import { ADD_BOOK, ALL_BOOKS, ALL_AUTHORS } from '../queries'
+import { updateCache } from '../App'
 
 const NewBook = ({ setError }) => {
   const [title, setTitle] = useState('')
@@ -21,25 +22,10 @@ const NewBook = ({ setError }) => {
     },
     update: (cache, response) => {
       //TO-DO: Update cache
+      console.log(response)
       updateCache(cache, { query: ALL_BOOKS }, response.data.addBook)
     }
   })
-
-  const updateCache = (cache, query, addedBook) => {
-    const uniqByTitle = (b) => {
-      let seen = new Set()
-      return b.filter((item) => {
-        let k = item.title
-        return seen.has(k) ? false : seen.add(k)
-      })
-    }
-
-    cache.updateQuery(query, ({ allBooks }) => {
-      return {
-        allBooks: uniqByTitle(allBooks.concat(addedBook))
-      }
-    })
-  }
 
   const submit = async (event) => {
     event.preventDefault()

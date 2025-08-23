@@ -16,6 +16,8 @@ const Books = () => {
     return <div>LOADING...</div>
   }
 
+  console.log(result)
+
   const getGenres = (books) => {
     // Create list of genres, then update state
     const libraryGenres = []
