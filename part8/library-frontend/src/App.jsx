@@ -13,9 +13,10 @@ import Notification from './components/Notififcation'
 import Recommendations from './components/Recommendations'
 
 import { ALL_BOOKS, BOOK_ADDED } from './queries'
-import { useSubscription } from '@apollo/client'
+import { useSubscription, useApolloClient } from '@apollo/client'
 
 export const updateCache = (cache, query, addedBook) => {
+  console.log(cache)
     const uniqByTitle = (b) => {
       let seen = new Set()
       return b.filter((item) => {
@@ -25,7 +26,7 @@ export const updateCache = (cache, query, addedBook) => {
     }
 
     cache.updateQuery(query, (data) => {
-      console.log(data)
+      console.log('in updateQuery:', cache)
       console.log('query', query)
       return {
         allBooks: uniqByTitle(data.allBooks.concat(addedBook))
@@ -37,6 +38,7 @@ const App = () => {
 
   const [token, setToken] = useState(null)
   const [errorMessage, setErrorMessage] = useState("")
+  const client = useApolloClient()
 
   const notify = (message) => {
     setErrorMessage(message)
@@ -55,8 +57,8 @@ const App = () => {
   }
 
   useSubscription(BOOK_ADDED, {
-    onData: ({ data, client }) => {
-      console.log(data)
+    onData: ({ data }) => {
+      //console.log(client.cache)
       window.alert(`${data.data.bookAdded.title} added!`)
       updateCache(client.cache, { query: ALL_BOOKS }, data.data.bookAdded )
     }
