@@ -17,6 +17,7 @@ import { useSubscription, useApolloClient } from '@apollo/client'
 
 export const updateCache = (cache, query, addedBook) => {
   console.log(cache)
+  console.log(query)
     const uniqByTitle = (b) => {
       let seen = new Set()
       return b.filter((item) => {
@@ -27,6 +28,7 @@ export const updateCache = (cache, query, addedBook) => {
 
     cache.updateQuery(query, (data) => {
       console.log('in updateQuery:', cache)
+      console.log('data', data)
       console.log('query', query)
       return {
         allBooks: uniqByTitle(data.allBooks.concat(addedBook))
