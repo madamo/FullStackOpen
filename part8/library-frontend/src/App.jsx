@@ -17,6 +17,7 @@ import { useSubscription, useApolloClient } from '@apollo/client'
 
 export const updateCache = (cache, query, addedBook) => {
   console.log(cache)
+  // TO-DO: query needs to be same query that initiated cache
   console.log(query)
     const uniqByTitle = (b) => {
       let seen = new Set()
