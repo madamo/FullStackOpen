@@ -19,7 +19,6 @@ export const updateCache = (cache, query, addedBook) => {
   console.log(cache)
   // TO-DO: query needs to be same query that initiated cache
   // TO-DO: check cache first?
-  // still figuring out this query
   console.log(query)
     const uniqByTitle = (b) => {
       let seen = new Set()
