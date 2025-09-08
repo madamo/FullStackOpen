@@ -19,6 +19,7 @@ export const updateCache = (cache, query, addedBook) => {
   console.log(cache)
   // TO-DO: query needs to be same query that initiated cache
   // TO-DO: check cache first? check passing variables to query
+  console.log(addedBook)
   console.log(query)
     const uniqByTitle = (b) => {
       let seen = new Set()
@@ -63,8 +64,9 @@ const App = () => {
   useSubscription(BOOK_ADDED, {
     onData: ({ data }) => {
       //console.log(client.cache)
+      //TO-DO: figure out why addedBook doesn't have published date
       window.alert(`${data.data.bookAdded.title} added!`)
-      updateCache(client.cache, { query: ALL_BOOKS }, data.data.bookAdded )
+      updateCache(client.cache, { query: ALL_BOOKS, variables: { genre: null } }, data.data.bookAdded )
     }
   })
 
