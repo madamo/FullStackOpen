@@ -23,7 +23,7 @@ const NewBook = ({ setError }) => {
     update: (cache, response) => {
       //TO-DO: Update cache
       console.log("response", response)
-      updateCache(cache, { query: ALL_BOOKS }, response.data.addBook)
+      updateCache(cache, { query: ALL_BOOKS, variables: { genre: null } }, response.data.addBook)
     }
   })
 
