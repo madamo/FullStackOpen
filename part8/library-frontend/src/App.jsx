@@ -50,13 +50,11 @@ const App = () => {
     }, 5000)
   }
 
-  //const navigate = useNavigate()
 
   const logout = () => {
     console.log('logout')
     setToken(null)
     localStorage.removeItem('library-user-token', token)
-    //navigate("/login")
   }
 
   useSubscription(BOOK_ADDED, {
