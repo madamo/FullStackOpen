@@ -5,7 +5,6 @@ import { ALL_BOOKS } from "../queries"
 const Books = () => {
 
   const [genres, setGenres] = useState([])
-  //const [booksToShow, setBooksToShow] = useState([])
   const [filter, setFilter] = useState(null)
 
   const result = useQuery(ALL_BOOKS, {
@@ -36,7 +35,6 @@ const Books = () => {
   }
 
   if (genres.length === 0) {
-    console.log('getting genres...')
     getGenres(result.data.allBooks)
   }
 

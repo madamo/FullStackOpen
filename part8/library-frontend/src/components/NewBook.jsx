@@ -9,7 +9,6 @@ const NewBook = ({ setError }) => {
   const [published, setPublished] = useState('')
   const [genre, setGenre] = useState('')
   const [genres, setGenres] = useState([])
-  //const [error, setError] = useState('')
 
   const [ addBook ] = useMutation(ADD_BOOK, {
     refetchQueries: [ { query: ALL_BOOKS }, {query: ALL_AUTHORS }],
@@ -21,16 +20,12 @@ const NewBook = ({ setError }) => {
       setError('Book added')
     },
     update: (cache, response) => {
-      //TO-DO: Update cache
-      console.log("response", response)
       updateCache(cache, { query: ALL_BOOKS, variables: { genre: null } }, response.data.addBook)
     }
   })
 
   const submit = async (event) => {
     event.preventDefault()
-
-    console.log('add book...')
 
     addBook({ variables: {title, author, published, genres} })
 

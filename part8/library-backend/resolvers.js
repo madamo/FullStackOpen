@@ -12,7 +12,6 @@ const resolvers = {
     bookCount: async (root) => {
       // TO-DO: Find better way to do this - maybe get author id then find all books where author matches id
       const author = await Author.findOne({ name: root.name })
-      console.log(author)
       return Book.find({ author: { _id: author._id} } ).countDocuments()
     }
   },
@@ -22,7 +21,6 @@ const resolvers = {
     allBooks: async (root, args) => {
       // If no arguments, return all books
       if (!args.author && !args.genre) {
-        console.log('allBooks: no args, returning all books')
         return Book.find( {} ).populate('author', { name: 1 })
       }
 
@@ -36,7 +34,6 @@ const resolvers = {
       }
     },
     recommendedBooks: async (root, args, context) => {
-      console.log("getting books with genre:", context.currentUser.favoriteGenre)
       const books = await Book.find({ genres: context.currentUser.favoriteGenre }).populate('author', { name: 1 })
       return books
     },
