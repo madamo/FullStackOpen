@@ -1,0 +1,59 @@
+/* 
+type Operation = 'multiply' | 'add' | 'divide';
+
+const calculator = (a: number, b: number, op: Operation): number => {
+  switch(op) {
+    case 'multiply':
+      return a * b;
+    case 'divide':
+      if (b === 0) throw new Error('can\'t divid by 0!');
+      return a / b;
+    case 'add':
+      return a + b;
+    default:
+      throw new Error('Operation is not multiply, add, or divide!')
+  }
+}
+
+try {
+  console.log(calculator(1, 5, 'divide'));
+} catch (error: unknown) {
+  let errorMessage = 'Something went wrong: '
+  if (error instanceof Error) {
+    errorMessage += error.message;
+  }
+  console.log(errorMessage);
+}
+
+interface MultiplyValues {
+  value1: number;
+  value2: number;
+}
+*/
+
+interface Result {
+  periodLength: number;
+  trainingDays: number;
+  success: Boolean;
+  rating: number;
+  ratingDescription: String;
+  target: number;
+  average: number;
+}
+
+const calculator = (hours: number[]) => {
+  let trainingDays = 0;
+  let totalHours = 0
+  hours.map(hour => {
+    if (hour > 0) {
+      trainingDays++
+      totalHours+=hour
+    } 
+  })
+  console.log('total hours', totalHours)
+  console.log('avg hours:', totalHours / hours.length )
+  console.log('training days:', trainingDays)
+  console.log('period length:', hours.length)
+}
+
+calculator([1,0,2,0,3])
