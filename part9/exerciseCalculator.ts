@@ -46,10 +46,10 @@ interface Result {
   average: number;
 }
 
-const calculator = (hours: number[]) => {
+const calculator = (target: number, hours: number[]) => {
   let trainingDays = 0;
   let totalHours = 0;
-  const target = 2;
+  //const target = 2;
 
   hours.map(hour => {
     if (hour > 0) {
@@ -73,4 +73,4 @@ const calculator = (hours: number[]) => {
   }
 }
 
-calculator([1,0,2,0,3])
+calculator(2, [1,0,2,0,3])
