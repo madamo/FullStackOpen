@@ -29,6 +29,11 @@ interface MultiplyValues {
   value1: number;
   value2: number;
 }
+
+    return {
+      value1: Number(args[2]),
+      value2: Number(args[3])
+    }
 */
 
 interface Result {
@@ -43,7 +48,9 @@ interface Result {
 
 const calculator = (hours: number[]) => {
   let trainingDays = 0;
-  let totalHours = 0
+  let totalHours = 0;
+  const target = 2;
+
   hours.map(hour => {
     if (hour > 0) {
       trainingDays++
@@ -54,6 +61,16 @@ const calculator = (hours: number[]) => {
   console.log('avg hours:', totalHours / hours.length )
   console.log('training days:', trainingDays)
   console.log('period length:', hours.length)
+  console.log('success:', totalHours / hours.length >= target ? true : false)
+  return {
+    periodLength: hours.length,
+    trainingDays: trainingDays,
+    success: totalHours / hours.length >= target ? true : false,
+    rating: 2,
+    ratingDescription: 'not too bad but could be better',
+    target: target,
+    average: totalHours / hours.length
+  }
 }
 
 calculator([1,0,2,0,3])
