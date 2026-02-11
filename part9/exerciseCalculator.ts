@@ -47,6 +47,10 @@ interface Result {
 }
 
 const calculator = (target: number, hours: number[]) => {
+  // TO-DO: get arguments
+  console.log(process.argv[2])
+  console.log(process.argv[3])
+
   let trainingDays = 0;
   let totalHours = 0;
   //const target = 2;
