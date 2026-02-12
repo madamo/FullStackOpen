@@ -1,24 +1,23 @@
-/*
-const calculator = (a: number, b: number, op: Operation): number => {
-  switch(op) {
-    case 'multiply':
-      return a * b;
-    case 'divide':
-      if (b === 0) throw new Error('can\'t divid by 0!');
-      return a / b;
-    case 'add':
-      return a + b;
-    default:
-      throw new Error('Operation is not multiply, add, or divide!')
+interface CalculateBmi {
+  height: number;
+  weight: number;
+}
+
+const parseArguments = (args: string[]): CalculateBmi => {
+  if (args.length < 4) throw new Error('Not enough arguments');
+  if (args.length > 4) throw new Error('Too many arguments');
+
+  if (!isNaN(Number(args[2])) && !isNaN(Number(args[3]))) {
+    return {
+      height: Number(args[2]),
+      weight: Number(args[3])
+    }
+  } else {
+    throw new Error('Provided values were not numbers');
   }
 }
 
-Major adult BMI classifications are underweight (under 18.5 kg/m2), normal weight (18.5 to 24.9), overweight (25 to 29.9), and obese (30 or more).[1] 
-*/
-
-const calculateBmi = (args: string[]) => {
-  const weight = Number(args[3]);
-  const height = Number(args[2]);
+const calculateBmi = (height: number, weight: number) => {
   const bmi = weight / ((height / 100) * (height/100));
   if (bmi < 18.5) {
     //return 'Underweight';
@@ -35,4 +34,13 @@ const calculateBmi = (args: string[]) => {
   }
 }
 
-calculateBmi(process.argv);
+try {
+  const { height, weight } = parseArguments(process.argv);
+  calculateBmi(height, weight)
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened';
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage);
+}
