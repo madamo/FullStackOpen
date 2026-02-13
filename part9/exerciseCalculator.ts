@@ -46,11 +46,28 @@ interface Result {
   average: number;
 }
 
-const calculator = (target: number, hours: number[]) => {
-  // TO-DO: get arguments
-  console.log(process.argv[2])
-  console.log(process.argv[3])
+interface exerciseLog {
+  target: number;
+  hours: number[];
+}
 
+const checkArguments = (args: string[]): exerciseLog => {
+  console.log(args);
+  if (args.length < 4) throw new Error('Not enough arguments');
+  const numberArray = args.slice(3).map(Number)
+  return {
+    target: Number(args[2]),
+    hours: numberArray
+  }
+}
+
+const calculator = (target: number, hours: number[]): Result => {
+  // TO-DO: get arguments
+  //console.log(process.argv[2])
+  //console.log(process.argv[3])
+  console.log('target:', target);
+  console.log('hours:', hours);
+  
   let trainingDays = 0;
   let totalHours = 0;
   //const target = 2;
@@ -77,4 +94,13 @@ const calculator = (target: number, hours: number[]) => {
   }
 }
 
-calculator(2, [1,0,2,0,3])
+try {
+  const { target, hours } = checkArguments(process.argv);
+  console.log(calculator(target, hours));
+} catch (error: unknown) {
+  let errorMessage = 'Something bad happened.';
+  if (error instanceof Error) {
+    errorMessage += ' Error: ' + error.message;
+  }
+  console.log(errorMessage);
+}

@@ -1,9 +1,9 @@
-interface CalculateBmi {
+interface bmiValues {
   height: number;
   weight: number;
 }
 
-const parseArguments = (args: string[]): CalculateBmi => {
+const parseArguments = (args: string[]): bmiValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
 
