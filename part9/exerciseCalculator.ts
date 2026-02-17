@@ -62,14 +62,14 @@ const checkArguments = (args: string[]): exerciseLog => {
 }
 
 const calculator = (target: number, hours: number[]): Result => {
-  // TO-DO: get arguments
-  //console.log(process.argv[2])
-  //console.log(process.argv[3])
+ 
   console.log('target:', target);
   console.log('hours:', hours);
-  
+
   let trainingDays = 0;
   let totalHours = 0;
+  let rating = 0;
+  let description = ""
   //const target = 2;
 
   hours.map(hour => {
@@ -78,17 +78,33 @@ const calculator = (target: number, hours: number[]): Result => {
       totalHours+=hour
     } 
   })
-  console.log('total hours', totalHours)
-  console.log('avg hours:', totalHours / hours.length )
-  console.log('training days:', trainingDays)
-  console.log('period length:', hours.length)
-  console.log('success:', totalHours / hours.length >= target ? true : false)
+
+  if (Math.round(totalHours / hours.length) > target) {
+    rating = 3
+  } else if (Math.round(totalHours / hours.length) === target) {
+    rating = 2;
+  } else {
+    rating = 1;
+  }
+
+  switch (rating) {
+    case 3:
+      description += "Good job"
+      break;
+    case 2:
+      description += "not bad but could be better"
+      break;
+    case 1:
+      description += "Try harder"
+      break;
+  }
+
   return {
     periodLength: hours.length,
     trainingDays: trainingDays,
     success: totalHours / hours.length >= target ? true : false,
-    rating: 2,
-    ratingDescription: 'not too bad but could be better',
+    rating: rating,
+    ratingDescription: description,
     target: target,
     average: totalHours / hours.length
   }
