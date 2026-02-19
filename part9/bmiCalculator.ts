@@ -3,6 +3,8 @@ interface bmiValues {
   weight: number;
 }
 
+
+
 const parseArguments = (args: string[]): bmiValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
@@ -20,23 +22,23 @@ const parseArguments = (args: string[]): bmiValues => {
 const calculateBmi = (height: number, weight: number) => {
   const bmi = weight / ((height / 100) * (height/100));
   if (bmi < 18.5) {
-    //return 'Underweight';
-    console.log("Underweight");
+    return 'Underweight';
+    //console.log("Underweight");
   } else if (bmi > 18.5 && bmi < 25) {
-    //return 'Normal range';
-    console.log("Normal range");
+    return 'Normal range';
+    //console.log("Normal range");
   } else if (bmi > 25 && bmi < 30) {
-    //return 'Overweight';
-    console.log("Overweight");
+    return 'Overweight';
+    //console.log("Overweight");
   } else {
-    console.log("Obese");
-    //return 'Obese';
+    //console.log("Obese");
+    return 'Obese';
   }
 }
 
 try {
   const { height, weight } = parseArguments(process.argv);
-  calculateBmi(height, weight)
+  console.log(calculateBmi(height, weight));
 } catch (error: unknown) {
   let errorMessage = 'Something bad happened';
   if (error instanceof Error) {
@@ -44,3 +46,5 @@ try {
   }
   console.log(errorMessage);
 }
+
+export default calculateBmi;
