@@ -3,7 +3,7 @@ interface bmiValues {
   weight: number;
 }
 
-
+//TO-DO: add ESLint
 
 const parseArguments = (args: string[]): bmiValues => {
   if (args.length < 4) throw new Error('Not enough arguments');
