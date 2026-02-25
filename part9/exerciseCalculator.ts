@@ -61,7 +61,7 @@ const checkArguments = (args: string[]): exerciseLog => {
   }
 }
 
-const calculator = (target: number, hours: number[]): Result => {
+export const calculator = (target: number, hours: number[]): Result => {
  
   console.log('target:', target);
   console.log('hours:', hours);
@@ -120,3 +120,5 @@ try {
   }
   console.log(errorMessage);
 }
+
+export default calculator;
