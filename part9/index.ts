@@ -34,7 +34,19 @@ app.post('/exercises', (req, res) => {
   const exercise = req.body;
   console.log(exercise)
   
-  res.send(calculator(exercise.target, exercise.daily_exercises))
+  if (!exercise.target || !exercise.daily_exercises) {
+    return res.status(400).send({
+      error: "parameters missing"
+    })
+  }
+
+  if (!exercise.content) {
+    return res.status(400).send({ 
+      error: 'content missing' 
+    })
+  }
+  
+  return res.send(calculator(exercise.target, exercise.daily_exercises))
 })
 
 const PORT = 3003;
