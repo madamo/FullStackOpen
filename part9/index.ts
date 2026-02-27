@@ -8,7 +8,7 @@ const app = express();
 app.use(express.json());
 
 app.get('/hello', (_req, res) => {
-  res.send('Hello Full Stack!');
+  res.send('Hello Full Stack Baby!');
 });
 
 app.get('/bmi', (req, res) => {
@@ -40,13 +40,14 @@ app.post('/exercises', (req, res) => {
     })
   }
 
-  if (!exercise.content) {
+/*  if (!exercise.content) {
     return res.status(400).send({ 
       error: 'content missing' 
     })
-  }
+  }*/
+  const result = calculator(exercise.target, exercise.daily_exercises)
   
-  return res.send(calculator(exercise.target, exercise.daily_exercises))
+  return res.send(result)
 })
 
 const PORT = 3003;
