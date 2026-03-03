@@ -40,11 +40,8 @@ app.post('/exercises', (req, res) => {
     })
   }
 
-/*  if (!exercise.content) {
-    return res.status(400).send({ 
-      error: 'content missing' 
-    })
-  }*/
+  //TO-DO: Check type of elements in daily_exercises
+
   const result = calculator(exercise.target, exercise.daily_exercises)
   
   return res.send(result)
