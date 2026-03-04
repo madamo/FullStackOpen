@@ -33,18 +33,28 @@ app.get('/bmi', (req, res) => {
 app.post('/exercises', (req, res) => {
   const exercise = req.body;
   console.log(exercise)
+  let error: string = ""
   
   if (!exercise.target || !exercise.daily_exercises) {
-    return res.status(400).send({
-      error: "parameters missing"
-    })
+    error = "parameters missing"
   }
 
-  //TO-DO: Check type of elements in daily_exercises
+  exercise.daily_exercises.map((el: number) => {
+    if (typeof el !== 'number') {
+      console.log('bad params')
+      error = "malformatted parameters"
+    }
+  })
 
-  const result = calculator(exercise.target, exercise.daily_exercises)
-  
-  return res.send(result)
+  if (error) {
+    return res.status(400).send({
+      error: error
+    })
+  } else {
+    const result = calculator(exercise.target, exercise.daily_exercises)
+    return res.send(result)
+  }
+
 })
 
 const PORT = 3003;
