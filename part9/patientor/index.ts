@@ -10,6 +10,8 @@ app.get('/api/ping', (_req, res) => {
   res.send('pong');
 });
 
+//TO-DO: CLONE FRONT-END
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
