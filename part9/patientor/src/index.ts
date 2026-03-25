@@ -16,6 +16,8 @@ app.use('/api/diagnoses', diagnosisRouter);
 
 app.use('/api/patients', patientRouter);
 
+// TODO: check routes
+
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
