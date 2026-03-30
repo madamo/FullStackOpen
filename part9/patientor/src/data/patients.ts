@@ -38,6 +38,14 @@ const data = [
         "ssn": "090471-8890",
         "gender": "male",
         "occupation": "Digital evangelist"
+    },
+    {
+        "id": "d2774d6e-f723-11e9-8f0b-362b9e155667",
+        "name": "Test Patient",
+        "dateOfBirth": "1981-04-09",
+        "ssn": "090471-8890",
+        "gender": "male",
+        "occupation": "Product tester"
     }
 ];
 
