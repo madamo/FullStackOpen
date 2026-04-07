@@ -5,6 +5,8 @@ import patientService from '../services/patientService';
 
 const router = express.Router();
 
+//TO-DO: Create endpoint to add patients
+
 router.get('/', (_req, res) => {
   res.send(patientService.getNonSensitivePatients());
 });
