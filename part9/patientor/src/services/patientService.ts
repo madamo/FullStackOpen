@@ -15,6 +15,8 @@ const getNonSensitivePatients = (): NonSensitivePatient[] => {
   }));
 };
 
+//TO-DO: Create add patient service
+
 export default {
   getPatients,
   getNonSensitivePatients

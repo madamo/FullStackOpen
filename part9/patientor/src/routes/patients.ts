@@ -14,7 +14,7 @@ router.get('/', (_req, res) => {
 
 //TO-DO: Create endpoint to add patients
 router.post('/', (req, res) => {
-  console.log(req.body)
+  console.log(req.body);
   const newPatient = req.body;
 
   res.send(newPatient);
